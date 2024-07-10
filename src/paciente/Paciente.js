@@ -127,6 +127,12 @@ const Paciente = ({ setIsLoggedIn }) => {
       <TouchableOpacity style={styles.tratamientosButton} onPress={() => handleNavigate('PacienteTratamientos')}>
         <Text style={styles.tratamientosButtonText}>Ver Tratamientos</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.misMedicosButton} onPress={() => handleNavigate('PacienteMisMedicos')}>
+        <Text style={styles.misMedicosButtonText}>Ver Mis Médicos</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.listaMedicosButton} onPress={() => handleNavigate('PacienteListaMedicos')}>
+        <Text style={styles.listaMedicosButtonText}>Ver Lista de Médicos</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutButtonText}>Cerrar Sesión</Text>
       </TouchableOpacity>
@@ -275,6 +281,32 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   tratamientosButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  misMedicosButton: {
+    backgroundColor: '#2D6A4F',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: 'center',
+    margin: 20,
+  },
+  misMedicosButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  listaMedicosButton: {
+    backgroundColor: '#2D6A4F',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: 'center',
+    margin: 20,
+  },
+  listaMedicosButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',

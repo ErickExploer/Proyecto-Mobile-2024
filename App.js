@@ -8,6 +8,8 @@ import PacienteEdit from './src/paciente/PacienteEdit';
 import PacienteConsulta from './src/paciente/PacienteConsulta';
 import PacienteHistorial from './src/paciente/PacienteHistorial';
 import PacienteTratamientos from './src/paciente/PacienteTratamientos';
+import PacienteMisMedicos from './src/paciente/PacienteMisMedicos'
+import PacienteListaMedicos from './src/paciente/PacienteListaMedicos'
 import Medico from './src/medico/Medico'; // Asegúrate de que la ruta sea correcta
 import MedicoEdit from './src/medico/MedicoEdit'
 import MedicoHistorial from './src/medico/MedicoHistorial'
@@ -37,6 +39,10 @@ const PacienteStack = ({ setIsLoggedIn }) => (
     <Stack.Screen name="PacienteConsulta" component={PacienteConsulta} />
     <Stack.Screen name="PacienteHistorial" component={PacienteHistorial} />
     <Stack.Screen name="PacienteTratamientos" component={PacienteTratamientos} />
+    <Stack.Screen name="PacienteMisMedicos" component={PacienteMisMedicos} />
+    <Stack.Screen name="PacienteListaMedicos" component={PacienteListaMedicos} />
+
+
   </Stack.Navigator>
 );
 
