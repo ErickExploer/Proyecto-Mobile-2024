@@ -67,10 +67,10 @@ const MedicoTratamientos = () => {
         ...tratamientoInfo,
       };
       await addTratamiento(tratamientoDTO, token);
-      Alert.alert('Success', 'Tratamiento añadido correctamente');
+      Alert.alert('Éxito', 'Tratamiento añadido correctamente');
       fetchTratamientos();
     } catch (error) {
-      console.error('Error adding tratamiento:', error);
+      console.error('Error añadiendo tratamiento:', error);
       Alert.alert('Error', 'Error añadiendo tratamiento');
     }
   };
@@ -79,7 +79,7 @@ const MedicoTratamientos = () => {
     try {
       const token = await SecureStore.getItemAsync('token');
       await deleteTratamiento(id, token);
-      Alert.alert('Success', 'Tratamiento eliminado correctamente');
+      Alert.alert('Éxito', 'Tratamiento eliminado correctamente');
       fetchTratamientos();
     } catch (error) {
       console.error('Error eliminando tratamiento:', error);
@@ -93,13 +93,11 @@ const MedicoTratamientos = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Tratamientos</Text>
-      </View>
-      <View style={styles.formContainer}>
+      <Text style={styles.header}>Añadir Tratamiento</Text>
+      <View style={styles.form}>
         <Text style={styles.label}>Nombre del Tratamiento:</Text>
         <TextInput
-          style={styles.input}
+          style={styles.textArea}
           value={tratamientoInfo.nombreTratamiento}
           onChangeText={(value) => handleInputChange('nombreTratamiento', value)}
           placeholder="Nombre del Tratamiento"
@@ -110,6 +108,7 @@ const MedicoTratamientos = () => {
             selectedValue={selectedPaciente}
             onValueChange={(itemValue) => setSelectedPaciente(itemValue)}
             style={styles.picker}
+            itemStyle={styles.pickerItem}
           >
             <Picker.Item label="Seleccione un paciente" value="" />
             {pacientes.map((paciente) => (
@@ -119,40 +118,33 @@ const MedicoTratamientos = () => {
         </View>
         <Text style={styles.label}>Descripción:</Text>
         <TextInput
-          style={[styles.input, styles.textArea]}
-          value={tratamientoInfo.descripcion}
-          onChangeText={(value) => handleInputChange('descripcion', value)}
-          placeholder="Descripción"
+          style={styles.textArea}
           multiline
+          numberOfLines={4}
+          onChangeText={(value) => handleInputChange('descripcion', value)}
+          value={tratamientoInfo.descripcion}
         />
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.submitButtonText}>Confirmar</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.tratamientosContainer}>
-        <Text style={styles.sectionTitle}>Tratamientos</Text>
-        {tratamientos.length > 0 ? (
-          tratamientos.map((tratamiento) => (
-            <View key={tratamiento.id} style={styles.tratamientoItem}>
-              <View style={styles.tratamientoDetails}>
-                <Text style={styles.tratamientoName}>Nombre: {tratamiento.nombreTratamiento}</Text>
-                <Text style={styles.tratamientoDescription}><Text style={styles.bold}>Descripción:</Text> {tratamiento.descripcion}</Text>
-              </View>
-              <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(tratamiento.id)}>
-                <Text style={styles.editButtonText}>Editar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(tratamiento.id)}>
-                <Text style={styles.deleteButtonText}>Eliminar</Text>
-              </TouchableOpacity>
-            </View>
-          ))
-        ) : (
-          <Text style={styles.noTratamientosText}>No hay tratamientos disponibles.</Text>
-        )}
-      </View>
-      <TouchableOpacity style={styles.loadMoreButton}>
-        <Text style={styles.loadMoreButtonText}>Cargar más...</Text>
-      </TouchableOpacity>
+      <Text style={styles.header}>Tratamientos</Text>
+      {tratamientos.length > 0 ? (
+        tratamientos.map((tratamiento) => (
+          <View key={tratamiento.id} style={styles.tratamientoItem}>
+            <Text style={styles.tratamientoDate}>Nombre: {tratamiento.nombreTratamiento}</Text>
+            <Text><Text style={styles.bold}>Descripción:</Text> {tratamiento.descripcion}</Text>
+            <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(tratamiento.id)}>
+              <Text style={styles.editButtonText}>Editar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(tratamiento.id)}>
+              <Text style={styles.deleteButtonText}>Eliminar</Text>
+            </TouchableOpacity>
+          </View>
+        ))
+      ) : (
+        <Text style={styles.noTratamientos}>No hay tratamientos disponibles.</Text>
+      )}
     </ScrollView>
   );
 };
@@ -160,144 +152,112 @@ const MedicoTratamientos = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7FFF7',
     padding: 20,
+    backgroundColor: '#F7FFF7',
   },
   header: {
-    backgroundColor: '#2D6A4F',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  headerText: {
     fontSize: 24,
-    color: 'white',
-    textAlign: 'center',
     fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#2D6A4F',
+    textAlign: 'center',
   },
-  formContainer: {
-    backgroundColor: '#DADADA',
+  form: {
+    marginBottom: 20,
+    backgroundColor: '#fff',
     padding: 20,
     borderRadius: 10,
-    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   label: {
     fontSize: 16,
-    color: '#333',
-    marginBottom: 5,
+    marginBottom: 10,
+    color: '#2D6A4F',
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: '#2D6A4F',
+    borderColor: '#95D5B2',
     borderRadius: 5,
-    marginBottom: 10,
+    marginBottom: 20,
     overflow: 'hidden',
+    justifyContent: 'center',
   },
   picker: {
     height: 50,
     backgroundColor: '#fff',
+    justifyContent: 'center',
   },
-  input: {
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    borderColor: '#2D6A4F',
-    borderWidth: 1,
+  pickerItem: {
+    height: 50,
+    color: '#2D6A4F',
+    textAlign: 'center',
   },
   textArea: {
     height: 100,
+    borderColor: '#95D5B2',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    textAlignVertical: 'top',
+    backgroundColor: '#fff',
   },
   submitButton: {
-    backgroundColor: '#2D6A4F',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: '#1E6793',
+    paddingVertical: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 10,
   },
   submitButtonText: {
-    color: 'white',
+    color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
-  },
-  tratamientosContainer: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    color: '#2D6A4F',
-    marginBottom: 10,
     fontWeight: 'bold',
   },
   tratamientoItem: {
-    flexDirection: 'row',
-    backgroundColor: '#2D6A4F',
+    marginBottom: 20,
     padding: 15,
     borderRadius: 10,
-    marginBottom: 10,
-    alignItems: 'center',
+    backgroundColor: '#E5E5E5',
   },
-  tratamientoDetails: {
-    flex: 1,
-  },
-  tratamientoName: {
-    fontSize: 18,
+  tratamientoDate: {
     fontWeight: 'bold',
-    color: 'white',
     marginBottom: 5,
-  },
-  tratamientoDescription: {
-    fontSize: 16,
-    color: 'white',
   },
   bold: {
     fontWeight: 'bold',
   },
-  noTratamientosText: {
-    fontSize: 16,
-    color: '#333',
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  loadMoreButton: {
-    backgroundColor: '#2D6A4F',
+  editButton: {
+    marginTop: 10,
+    backgroundColor: '#1E6793',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20,
-  },
-  loadMoreButtonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  editButton: {
-    backgroundColor: '#95D5B2',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginLeft: 10,
   },
   editButtonText: {
-    color: 'white',
+    color: '#fff',
     fontWeight: 'bold',
   },
   deleteButton: {
+    marginTop: 10,
     backgroundColor: '#E63946',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    marginLeft: 10,
+    alignItems: 'center',
   },
   deleteButtonText: {
-    color: 'white',
+    color: '#fff',
     fontWeight: 'bold',
+  },
+  noTratamientos: {
+    textAlign: 'center',
+    color: '#333',
+    marginTop: 10,
   },
 });
 
