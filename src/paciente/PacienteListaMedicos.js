@@ -44,8 +44,8 @@ const PacienteListaMedicos = () => {
             </View>
             <View style={styles.content}>
                 {medicos.length > 0 ? (
-                    medicos.map((medico) => (
-                        <View key={medico.id} style={styles.medicoCard}>
+                    medicos.map((medico, index) => (
+                        <View key={`${medico.id}-${index}`} style={styles.medicoCard}>
                             <Image source={require('../../img/ListaMedicos.png')} style={styles.medicoImage} />
                             <View style={styles.medicoInfo}>
                                 <View>
