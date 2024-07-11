@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { getMedicos, patchMedicoByPacienteId } from '../api'; // Import the function to get doctors and assign doctor to patient
 import * as SecureStore from 'expo-secure-store';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const PacienteListaMedicos = () => {
     const [medicos, setMedicos] = useState([]);
@@ -48,15 +49,17 @@ const PacienteListaMedicos = () => {
                             <Image source={require('../../img/ListaMedicos.png')} style={styles.medicoImage} />
                             <View style={styles.medicoInfo}>
                                 <View>
-                                    <Text style={styles.medicoName}>Médico: {medico.nombre} {medico.apellido}</Text>
-                                    <Text>{medico.email}</Text>
-                                    <Text>{medico.telefono}</Text>
-                                    <Text>{medico.edad} años</Text>
+                                    <Text style={styles.medicoName}>{medico.nombre} {medico.apellido}</Text>
+                                    <Text style={styles.medicoDetail}>{medico.edad} años - {medico.especialidad}</Text>
                                 </View>
-                                <View>
-                                    <Text>Sexo: {medico.sexo}</Text>
-                                    <Text>Especialidad: {medico.especialidad}</Text>
+                                <View style={styles.sessionInfo}>
+                                    <Text style={styles.sessionText}>3:00 PM - 60 min</Text>
+                                    <Text style={styles.sessionText}>Session 11/13</Text>
                                 </View>
+                            </View>
+                            <View style={styles.locationInfo}>
+                                <Icon name="location-on" size={20} color="#1D8348" />
+                                <Text style={styles.locationText}>{medico.direccion}</Text>
                             </View>
                             <View style={styles.buttonsContainer}>
                                 <TouchableOpacity style={styles.addButton} onPress={() => handleAddMedico(medico.id)}>
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F7FFF7',
     },
     header: {
-        backgroundColor: '#2D6A4F',
+        backgroundColor: '#1D8348',
         paddingVertical: 10,
         paddingHorizontal: 10,
         borderBottomLeftRadius: 20,
@@ -103,40 +106,59 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     medicoCard: {
-        backgroundColor: '#333',
-        padding: 20,
+        backgroundColor: '#fff',
+        padding: 15,
         borderRadius: 10,
         marginBottom: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     medicoImage: {
         width: 50,
         height: 50,
-        marginRight: 10,
         borderRadius: 25,
+        marginBottom: 10,
     },
     medicoInfo: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginBottom: 10,
     },
     medicoName: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#fff',
+        color: '#333',
+    },
+    medicoDetail: {
+        color: '#666',
+    },
+    sessionInfo: {
+        alignItems: 'flex-end',
+    },
+    sessionText: {
+        color: '#666',
+    },
+    locationInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    locationText: {
+        marginLeft: 5,
+        color: '#1D8348',
     },
     buttonsContainer: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginLeft: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     addButton: {
-        backgroundColor: '#4CAF50',
+        backgroundColor: '#1D8348',
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,
-        marginBottom: 10,
     },
     routeButton: {
         backgroundColor: '#2196F3',
@@ -149,7 +171,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     loadMoreButton: {
-        backgroundColor: '#4CAF50',
+        backgroundColor: '#1D8348',
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,

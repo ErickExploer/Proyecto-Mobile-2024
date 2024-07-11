@@ -23,7 +23,6 @@ const PacienteMisMedicos = () => {
 
     useEffect(() => {
         if (userInfo) {
-            console.log(userInfo)
             const fetchMedicos = async () => {
                 try {
                     const token = await AsyncStorage.getItem('token');
@@ -46,25 +45,20 @@ const PacienteMisMedicos = () => {
             <View style={styles.content}>
                 {medico ? (
                     <View key={medico.id} style={styles.medicoCard}>
-                        <Image source={ListaMedicos} style={styles.medicoImage} />
-                        <View style={styles.medicoInfo}>
-                            <View>
-                                <Text style={styles.medicoName}>Medico: {medico.nombre} {medico.apellido}</Text>
-                                <Text>{medico.email}</Text>
-                                <Text>{medico.telefono}</Text>
-                                <Text>{medico.edad} años</Text>
-                            </View>
-                            <View>
-                                <Text>Sexo: {medico.sexo}</Text>
-                                <Text>Especialidad: {medico.especialidad}</Text>
-                            </View>
+                        <View style={styles.cardHeader}>
+                            <Image source={ListaMedicos} style={styles.medicoImage} />
+                            <Text style={styles.medicoName}>Dr. {medico.nombre} {medico.apellido}</Text>
                         </View>
+                        <Text style={styles.specialtyText}>{medico.especialidad}</Text>
+                        <Text style={styles.infoText}>Email: {medico.email}</Text>
+                        <Text style={styles.infoText}>Teléfono: {medico.telefono}</Text>
+                        <Text style={styles.infoText}>Edad: {medico.edad} años</Text>
                         <TouchableOpacity style={styles.button}>
                             <Text style={styles.buttonText}>Ver Ruta</Text>
                         </TouchableOpacity>
                     </View>
                 ) : (
-                    <Text>No hay médicos asignados.</Text>
+                    <Text style={styles.noMedicoText}>No hay médicos asignados.</Text>
                 )}
             </View>
         </ScrollView>
@@ -77,45 +71,78 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     header: {
-        backgroundColor: '#4CAF50',
-        padding: 20,
+        backgroundColor: '#1D8348',
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     headerText: {
-        color: '#fff',
         fontSize: 24,
+        color: 'white',
+        textAlign: 'center',
         fontWeight: 'bold',
     },
     content: {
         padding: 20,
     },
     medicoCard: {
-        backgroundColor: '#333',
+        backgroundColor: '#1D8348',
         padding: 20,
         borderRadius: 10,
         marginBottom: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    cardHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
     },
     medicoImage: {
         width: 50,
         height: 50,
-        marginBottom: 10,
-    },
-    medicoInfo: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 10,
+        borderRadius: 25,
+        marginRight: 10,
     },
     medicoName: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#fff',
+        color: 'white',
+    },
+    specialtyText: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#D3D3D3',
+        marginBottom: 10,
+    },
+    infoText: {
+        fontSize: 14,
+        color: 'white',
+        marginBottom: 5,
     },
     button: {
-        backgroundColor: '#2196F3',
-        padding: 10,
+        backgroundColor: '#D9534F',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 10,
     },
     buttonText: {
-        color: '#fff',
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    noMedicoText: {
+        fontSize: 16,
+        color: '#333',
+        textAlign: 'center',
+        marginTop: 20,
     },
 });
 

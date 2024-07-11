@@ -86,7 +86,7 @@ const Paciente = ({ setIsLoggedIn }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>¡Bienvenido de vuelta! 😊</Text>
+        <Text style={styles.headerText}>Welcome, {userInfo?.nombre} 😊</Text>
       </View>
       <ScrollView 
         contentContainerStyle={styles.content}
@@ -94,48 +94,26 @@ const Paciente = ({ setIsLoggedIn }) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.imageContainer}>
-          {photo ? (
-            <Image source={{ uri: photo.uri }} style={styles.mainImage} />
-          ) : (
-            <Image source={require('../../img/PacienteImagen.png')} style={styles.mainImage} />
-          )}
-        </View>
-        <View style={styles.infoContainer}>
-          <View style={styles.userInfo}>
-            <Image source={require('../../img/UserIcon.png')} style={styles.userIcon} />
-            <View style={styles.userDetails}>
-              <Text style={styles.infoText}><Text style={styles.bold}>Nombre:</Text> {userInfo?.nombre}</Text>
-              <Text style={styles.infoText}><Text style={styles.bold}>Apellido:</Text> {userInfo?.apellido}</Text>
-              <Text style={styles.infoText}><Text style={styles.bold}>Email:</Text> {userInfo?.email}</Text>
-              <Text style={styles.infoText}><Text style={styles.bold}>Teléfono:</Text> {userInfo?.telefono}</Text>
-              <Text style={styles.infoText}><Text style={styles.bold}>Edad:</Text> {userInfo?.edad}</Text>
-            </View>
+        <View style={styles.card}>
+          <Image source={photo ? { uri: photo.uri } : require('../../img/PacienteImagen.png')} style={styles.profileImage} />
+          <View style={styles.cardContent}>
+            <Text style={styles.name}>{userInfo?.nombre} {userInfo?.apellido}</Text>
+            <Text style={styles.email}>{userInfo?.email}</Text>
+            <Text style={styles.info}>Teléfono: {userInfo?.telefono}</Text>
+            <Text style={styles.info}>Edad: {userInfo?.edad}</Text>
+            <Text style={styles.info}>Dirección: Lima, Peru</Text>
+            <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
+              <Text style={styles.editButtonText}>Editar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.joinButton} onPress={() => handleNavigate('PacienteConsulta')}>
+              <Text style={styles.joinButtonText}>Ir a Consulta</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
-            <Image source={require('../../img/Pencil.png')} style={styles.editIcon} />
-            <Text style={styles.editButtonText}>Editar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.routeButton} onPress={() => handleNavigate('PacienteConsulta')}>
-            <Text style={styles.routeButtonText}>Ir a Consulta</Text>
-          </TouchableOpacity>
         </View>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>Cerrar Sesión</Text>
+        </TouchableOpacity>
       </ScrollView>
-      <TouchableOpacity style={styles.historialButton} onPress={() => handleNavigate('PacienteHistorial')}>
-        <Text style={styles.historialButtonText}>Ver Historial Médico</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.tratamientosButton} onPress={() => handleNavigate('PacienteTratamientos')}>
-        <Text style={styles.tratamientosButtonText}>Ver Tratamientos</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.misMedicosButton} onPress={() => handleNavigate('PacienteMisMedicos')}>
-        <Text style={styles.misMedicosButtonText}>Ver Mis Médicos</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.listaMedicosButton} onPress={() => handleNavigate('PacienteListaMedicos')}>
-        <Text style={styles.listaMedicosButtonText}>Ver Lista de Médicos</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Cerrar Sesión</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -144,10 +122,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F7FFF7',
-    justifyContent: 'center',
   },
   header: {
-    backgroundColor: '#2D6A4F',
+    backgroundColor: '#1D8348',
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderBottomLeftRadius: 20,
@@ -164,151 +141,68 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
     alignItems: 'center',
-    justifyContent: 'center',
     flexGrow: 1,
   },
-  imageContainer: {
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  mainImage: {
-    width: 120,
-    height: 120,
-    resizeMode: 'contain',
-    borderRadius: 60,
-    borderColor: '#95D5B2',
-    borderWidth: 2,
-  },
-  infoContainer: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 15,
-    width: '100%',
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
-    alignItems: 'center',
-  },
-  userInfo: {
+    shadowRadius: 4,
+    elevation: 3,
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
   },
-  userIcon: {
+  profileImage: {
     width: 80,
     height: 80,
-    marginRight: 20,
     borderRadius: 40,
-    borderColor: '#95D5B2',
-    borderWidth: 2,
+    marginRight: 15,
   },
-  userDetails: {
+  cardContent: {
     flex: 1,
   },
-  infoText: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: '#333',
-    fontFamily: 'Helvetica',
-  },
-  bold: {
+  name: {
+    fontSize: 18,
     fontWeight: 'bold',
+    color: '#333',
+  },
+  email: {
+    fontSize: 16,
+    color: '#777',
+    marginBottom: 5,
+  },
+  info: {
+    fontSize: 14,
     color: '#555',
+    marginBottom: 5,
   },
   editButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#2D6A4F',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: '#1D8348',
+    paddingVertical: 8,
+    paddingHorizontal: 15,
     borderRadius: 5,
-    alignSelf: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
-    marginBottom: 10,
-  },
-  editIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 10,
-    tintColor: 'white',
+    marginTop: 10,
+    alignItems: 'center',
   },
   editButtonText: {
-    color: 'white',
+    color: '#fff',
     fontWeight: 'bold',
   },
-  routeButton: {
-    backgroundColor: '#2D6A4F',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+  joinButton: {
+    backgroundColor: '#FFA500',
+    paddingVertical: 8,
+    paddingHorizontal: 15,
     borderRadius: 5,
-    alignSelf: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
-    marginBottom: 10,
-  },
-  routeButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  historialButton: {
-    backgroundColor: '#2D6A4F',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    marginTop: 10,
     alignItems: 'center',
-    margin: 20,
   },
-  historialButtonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  tratamientosButton: {
-    backgroundColor: '#2D6A4F',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignItems: 'center',
-    margin: 20,
-  },
-  tratamientosButtonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  misMedicosButton: {
-    backgroundColor: '#2D6A4F',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignItems: 'center',
-    margin: 20,
-  },
-  misMedicosButtonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  listaMedicosButton: {
-    backgroundColor: '#2D6A4F',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignItems: 'center',
-    margin: 20,
-  },
-  listaMedicosButtonText: {
-    color: 'white',
-    fontSize: 18,
+  joinButtonText: {
+    color: '#fff',
     fontWeight: 'bold',
   },
   logoutButton: {
@@ -317,7 +211,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
-    margin: 20,
+    marginVertical: 20,
+    alignSelf: 'center',
   },
   logoutButtonText: {
     color: 'white',

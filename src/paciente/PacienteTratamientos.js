@@ -48,22 +48,24 @@ const PacienteTratamientos = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Tratamientos</Text>
       </View>
-      {tratamientos.length > 0 ? (
-        tratamientos.map((tratamiento) => (
-          <View key={tratamiento.id} style={styles.tratamientoItem}>
-            <Image source={require('../../img/medicine.png')} style={styles.icon} />
-            <View style={styles.tratamientoDetails}>
-              <Text style={styles.tratamientoName}>Nombre: {tratamiento.nombreTratamiento}</Text>
-              <Text style={styles.tratamientoDescription}><Text style={styles.bold}>Descripción:</Text> {tratamiento.descripcion}</Text>
+      <View style={styles.content}>
+        {tratamientos.length > 0 ? (
+          tratamientos.map((tratamiento) => (
+            <View key={tratamiento.id} style={styles.tratamientoItem}>
+              <Image source={require('../../img/medicine.png')} style={styles.icon} />
+              <View style={styles.tratamientoDetails}>
+                <Text style={styles.tratamientoName}>Nombre: {tratamiento.nombreTratamiento}</Text>
+                <Text style={styles.tratamientoDescription}><Text style={styles.bold}>Descripción:</Text> {tratamiento.descripcion}</Text>
+              </View>
             </View>
-          </View>
-        ))
-      ) : (
-        <Text style={styles.noTratamientosText}>No hay tratamientos disponibles.</Text>
-      )}
-      <TouchableOpacity style={styles.loadMoreButton}>
-        <Text style={styles.loadMoreButtonText}>Cargar más...</Text>
-      </TouchableOpacity>
+          ))
+        ) : (
+          <Text style={styles.noTratamientosText}>No hay tratamientos disponibles.</Text>
+        )}
+        <TouchableOpacity style={styles.loadMoreButton}>
+          <Text style={styles.loadMoreButtonText}>Cargar más...</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -71,18 +73,16 @@ const PacienteTratamientos = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7FFF7',
-    padding: 20,
+    backgroundColor: '#fff',
   },
   header: {
-    backgroundColor: '#2D6A4F',
-    paddingVertical: 15,
+    backgroundColor: '#1D8348',
+    paddingVertical: 10,
     paddingHorizontal: 10,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
   },
   headerText: {
     fontSize: 24,
@@ -90,13 +90,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
+  content: {
+    padding: 20,
+  },
   tratamientoItem: {
     flexDirection: 'row',
-    backgroundColor: '#2D6A4F',
+    backgroundColor: '#1D8348',
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
     alignItems: 'center',
+    marginTop: 10, // Espaciado para que no esté tan pegado a la parte superior
   },
   icon: {
     width: 40,
@@ -126,7 +130,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   loadMoreButton: {
-    backgroundColor: '#2D6A4F',
+    backgroundColor: '#1D8348',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

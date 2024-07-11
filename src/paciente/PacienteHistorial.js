@@ -50,22 +50,24 @@ const PacienteHistorial = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Historial Médico</Text>
       </View>
-      {historial.length > 0 ? (
-        historial.map((historialM) => (
-          <View key={historialM.id} style={styles.historialItem}>
-            <Image source={require('../../img/Clock.png')} style={styles.icon} />
-            <View style={styles.historialDetails}>
-              <Text style={styles.historialDate}>Fecha: {format(new Date(historialM.fecha), 'dd MMMM, yyyy h:mm a', { locale: es })}</Text>
-              <Text style={styles.historialDescription}><Text style={styles.bold}>Descripción:</Text> {historialM.descripcion}</Text>
+      <View style={styles.content}>
+        {historial.length > 0 ? (
+          historial.map((historialM) => (
+            <View key={historialM.id} style={styles.historialItem}>
+              <Image source={require('../../img/Clock.png')} style={styles.icon} />
+              <View style={styles.historialDetails}>
+                <Text style={styles.historialDate}>Fecha: {format(new Date(historialM.fecha), 'dd MMMM, yyyy h:mm a', { locale: es })}</Text>
+                <Text style={styles.historialDescription}><Text style={styles.bold}>Descripción:</Text> {historialM.descripcion}</Text>
+              </View>
             </View>
-          </View>
-        ))
-      ) : (
-        <Text style={styles.noHistorialText}>No hay Historial Médico.</Text>
-      )}
-      <TouchableOpacity style={styles.loadMoreButton}>
-        <Text style={styles.loadMoreButtonText}>Cargar más...</Text>
-      </TouchableOpacity>
+          ))
+        ) : (
+          <Text style={styles.noHistorialText}>No hay Historial Médico.</Text>
+        )}
+        <TouchableOpacity style={styles.loadMoreButton}>
+          <Text style={styles.loadMoreButtonText}>Cargar más...</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -73,32 +75,34 @@ const PacienteHistorial = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7FFF7',
-    padding: 20,
-  },
-  header: {
-    backgroundColor: '#2D6A4F',
-    paddingVertical: 15,
+    backgroundColor: '#fff',
+},
+header: {
+    backgroundColor: '#1D8348',
+    paddingVertical: 10,
     paddingHorizontal: 10,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
-  },
-  headerText: {
+},
+headerText: {
     fontSize: 24,
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
-  },
+},
+content: {
+    padding: 20,
+},
   historialItem: {
     flexDirection: 'row',
-    backgroundColor: '#2D6A4F',
+    backgroundColor: '#1D8348',
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
     alignItems: 'center',
+    marginTop: 10, // Espaciado para que no esté tan pegado a la parte superior
   },
   icon: {
     width: 40,
@@ -128,7 +132,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   loadMoreButton: {
-    backgroundColor: '#2D6A4F',
+    backgroundColor: '#1D8348',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { login } from './api'; // Asegúrate de que la ruta sea correcta
 import * as SecureStore from 'expo-secure-store';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Login = ({ navigation, setIsLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const base64UrlDecode = (str) => {
     str = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -50,43 +52,63 @@ const Login = ({ navigation, setIsLoggedIn }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Bienvenido a SalPÉ</Text>
-      <Image source={require('../img/Logo_ODAD.png')} style={styles.logo} />
-      <Text style={styles.label}>Correo:</Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Ingrese su correo"
-        placeholderTextColor="#aaa"
-      />
-      <Text style={styles.label}>Contraseña:</Text>
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Ingrese su contraseña"
-        placeholderTextColor="#aaa"
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Iniciar Sesión</Text>
-      </TouchableOpacity>
-      <Text style={styles.or}>O</Text>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.buttonText}>Registro</Text>
-      </TouchableOpacity>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <View style={styles.innerContainer}>
+        <Text style={styles.title}>Bienvenido a SalPÉ</Text>
+        <Image source={require('../img/Logo_ODAD.png')} style={styles.logo} />
+        <Text style={styles.label}>Correo:</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Ingrese su correo"
+          placeholderTextColor="#aaa"
+        />
+        <Text style={styles.label}>Contraseña:</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={[styles.input, styles.passwordInput]}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Ingrese su contraseña"
+            placeholderTextColor="#aaa"
+            secureTextEntry={!isPasswordVisible}
+          />
+          <TouchableOpacity
+            style={styles.eyeButton}
+            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
+            <Icon
+              name={isPasswordVisible ? 'visibility' : 'visibility-off'}
+              size={24}
+              color="gray"
+            />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Iniciar Sesión</Text>
+        </TouchableOpacity>
+        <Text style={styles.or}>O</Text>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.buttonText}>Registro</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#1E6793',
+  },
+  innerContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1E6793',
     padding: 16,
   },
   title: {
@@ -114,6 +136,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     backgroundColor: 'white',
     borderRadius: 8,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+    marginBottom: 12,
+  },
+  passwordInput: {
+    flex: 1,
+    paddingRight: 40, // Añadir espacio para el icono de visibilidad
+  },
+  eyeButton: {
+    position: 'absolute',
+    right: 10,
+    padding: 5,
   },
   button: {
     width: '80%',
