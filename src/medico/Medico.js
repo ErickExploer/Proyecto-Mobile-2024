@@ -20,7 +20,7 @@ const Medico = ({ setIsLoggedIn }) => {
         setUserInfo(data);
       }
     } catch (error) {
-
+      console.error('Error fetching user info', error);
     }
   };
 
@@ -36,14 +36,6 @@ const Medico = ({ setIsLoggedIn }) => {
 
   const handleEdit = () => {
     navigation.navigate('MedicoEdit');
-  };
-
-  const handleHistorial = () => {
-    navigation.navigate('MedicoHistorial');
-  };
-
-  const handleTratamientos = () => {
-    navigation.navigate('MedicoTratamientos');
   };
 
   const handleLogout = async () => {
@@ -81,7 +73,9 @@ const Medico = ({ setIsLoggedIn }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>¡Bienvenido de vuelta! 👨‍⚕️</Text>
+        <Text style={styles.headerText}>
+          ¡Bienvenido de vuelta{userInfo?.nombre ? `, ${userInfo.nombre}` : ''}! 👨‍⚕️
+        </Text>
       </View>
       <ScrollView 
         contentContainerStyle={styles.content}
@@ -89,36 +83,22 @@ const Medico = ({ setIsLoggedIn }) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.imageContainer}>
-          <Image source={require('../../img/MedicoImagen.png')} style={styles.mainImage} />
-        </View>
-        <View style={styles.infoContainer}>
-          <View style={styles.userInfo}>
-            <Image source={require('../../img/UserIcon.png')} style={styles.userIcon} />
-            <View style={styles.userDetails}>
-              <Text style={styles.infoText}><Text style={styles.bold}>Nombre:</Text> {userInfo?.nombre}</Text>
-              <Text style={styles.infoText}><Text style={styles.bold}>Apellido:</Text> {userInfo?.apellido}</Text>
-              <Text style={styles.infoText}><Text style={styles.bold}>Email:</Text> {userInfo?.email}</Text>
-              <Text style={styles.infoText}><Text style={styles.bold}>Teléfono:</Text> {userInfo?.telefono}</Text>
-              <Text style={styles.infoText}><Text style={styles.bold}>Edad:</Text> {userInfo?.edad}</Text>
-              <Text style={styles.infoText}><Text style={styles.bold}>Especialidad:</Text> {userInfo?.especialidad}</Text>
-            </View>
+        <View style={styles.card}>
+          <Image source={require('../../img/MedicoImagen.png')} style={styles.profileImage} />
+          <View style={styles.cardContent}>
+            <Text style={styles.name}>{userInfo?.nombre} {userInfo?.apellido}</Text>
+            <Text style={styles.email}>{userInfo?.email}</Text>
+            <Text style={styles.info}>Teléfono: {userInfo?.telefono}</Text>
+            <Text style={styles.info}>Edad: {userInfo?.edad}</Text>
+            <Text style={styles.info}>Especialidad: {userInfo?.especialidad}</Text>
+            <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
+              <Text style={styles.editButtonText}>Editar</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
-            <Text style={styles.editButtonText}>Editar</Text>
-          </TouchableOpacity>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.historialButton} onPress={handleHistorial}>
-            <Text style={styles.historialButtonText}>Ver Historial Médico</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.historialButton} onPress={handleTratamientos}>
-            <Text style={styles.historialButtonText}>Ver Tratamientos</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-            <Text style={styles.logoutButtonText}>Cerrar Sesión</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>Cerrar Sesión</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -127,102 +107,76 @@ const Medico = ({ setIsLoggedIn }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FDFEFE',
   },
   header: {
     backgroundColor: '#1E6793',
-    padding: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerText: {
     fontSize: 24,
     color: 'white',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   content: {
     padding: 20,
     alignItems: 'center',
-    justifyContent: 'center',
     flexGrow: 1,
   },
-  imageContainer: {
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  mainImage: {
-    width: 150,
-    height: 150,
-    resizeMode: 'contain',
-  },
-  infoContainer: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 15,
-    width: '100%',
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
-    alignItems: 'center',
-  },
-  userInfo: {
+    shadowRadius: 4,
+    elevation: 3,
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
   },
-  userIcon: {
+  profileImage: {
     width: 80,
     height: 80,
-    marginRight: 20,
+    borderRadius: 40,
+    marginRight: 15,
   },
-  userDetails: {
+  cardContent: {
     flex: 1,
   },
-  infoText: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: '#333',
-    fontFamily: 'Helvetica',
-  },
-  bold: {
+  name: {
+    fontSize: 18,
     fontWeight: 'bold',
+    color: '#333',
+  },
+  email: {
+    fontSize: 16,
+    color: '#777',
+    marginBottom: 5,
+  },
+  info: {
+    fontSize: 14,
     color: '#555',
+    marginBottom: 5,
   },
   editButton: {
-    backgroundColor: '#1E6793',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: '#FFA500',
+    paddingVertical: 8,
+    paddingHorizontal: 15,
     borderRadius: 5,
-    alignSelf: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
-    marginBottom: 10,
-  },
-  editButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  buttonContainer: {
-    marginTop: 20,
+    marginTop: 10,
     alignItems: 'center',
   },
-  historialButton: {
-    backgroundColor: '#1E6793',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
-    marginBottom: 10,
-  },
-  historialButtonText: {
-    color: 'white',
+  editButtonText: {
+    color: '#fff',
     fontWeight: 'bold',
   },
   logoutButton: {
@@ -230,15 +184,13 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
-    marginBottom: 10,
+    alignItems: 'center',
+    marginVertical: 20,
+    alignSelf: 'center',
   },
   logoutButtonText: {
     color: 'white',
+    fontSize: 18,
     fontWeight: 'bold',
   },
 });

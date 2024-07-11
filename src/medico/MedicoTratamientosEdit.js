@@ -54,7 +54,7 @@ const MedicoTratamientosEdit = () => {
   const handleUpdate = async () => {
     try {
       await updateTratamientoInfo(id, tratamientoInfo, token);
-      Alert.alert('Success', 'Tratamiento actualizado correctamente');
+      Alert.alert('Éxito', 'Tratamiento actualizado correctamente');
       navigation.navigate('MedicoTratamientos');
     } catch (error) {
       console.error('Error actualizando el tratamiento:', error);
@@ -67,23 +67,25 @@ const MedicoTratamientosEdit = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Editar Tratamiento</Text>
       </View>
-      <View style={styles.formContainer}>
-        <Text style={styles.label}>Nombre del Tratamiento</Text>
-        <TextInput
-          style={styles.input}
-          value={tratamientoInfo.nombreTratamiento}
-          onChangeText={(value) => handleInputChange('nombreTratamiento', value)}
-        />
-        <Text style={styles.label}>Descripción</Text>
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          value={tratamientoInfo.descripcion}
-          onChangeText={(value) => handleInputChange('descripcion', value)}
-          multiline
-        />
-        <TouchableOpacity style={styles.submitButton} onPress={handleUpdate}>
-          <Text style={styles.submitButtonText}>Actualizar</Text>
-        </TouchableOpacity>
+      <View style={styles.content}>
+        <View style={styles.formContainer}>
+          <Text style={styles.label}>Nombre del Tratamiento</Text>
+          <TextInput
+            style={styles.input}
+            value={tratamientoInfo.nombreTratamiento}
+            onChangeText={(value) => handleInputChange('nombreTratamiento', value)}
+          />
+          <Text style={styles.label}>Descripción</Text>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            value={tratamientoInfo.descripcion}
+            onChangeText={(value) => handleInputChange('descripcion', value)}
+            multiline
+          />
+          <TouchableOpacity style={styles.submitButton} onPress={handleUpdate}>
+            <Text style={styles.submitButtonText}>Actualizar</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -92,18 +94,16 @@ const MedicoTratamientosEdit = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7FFF7',
-    padding: 20,
+    backgroundColor: '#FDFEFE',
   },
   header: {
-    backgroundColor: '#2D6A4F',
+    backgroundColor: '#1E6793',
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
   },
   headerText: {
     fontSize: 24,
@@ -111,11 +111,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
+  content: {
+    padding: 20,
+  },
   formContainer: {
-    backgroundColor: '#DADADA',
+    backgroundColor: '#ffffff',
     padding: 20,
     borderRadius: 10,
     marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   label: {
     fontSize: 16,
@@ -123,18 +131,18 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   input: {
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     padding: 10,
     borderRadius: 5,
     marginBottom: 10,
-    borderColor: '#2D6A4F',
+    borderColor: '#1E6793',
     borderWidth: 1,
   },
   textArea: {
     height: 100,
   },
   submitButton: {
-    backgroundColor: '#2D6A4F',
+    backgroundColor: '#1D8348',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

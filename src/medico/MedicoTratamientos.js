@@ -93,58 +93,64 @@ const MedicoTratamientos = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>Añadir Tratamiento</Text>
-      <View style={styles.form}>
-        <Text style={styles.label}>Nombre del Tratamiento:</Text>
-        <TextInput
-          style={styles.textArea}
-          value={tratamientoInfo.nombreTratamiento}
-          onChangeText={(value) => handleInputChange('nombreTratamiento', value)}
-          placeholder="Nombre del Tratamiento"
-        />
-        <Text style={styles.label}>Seleccionar Paciente:</Text>
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={selectedPaciente}
-            onValueChange={(itemValue) => setSelectedPaciente(itemValue)}
-            style={styles.picker}
-            itemStyle={styles.pickerItem}
-          >
-            <Picker.Item label="Seleccione un paciente" value="" />
-            {pacientes.map((paciente) => (
-              <Picker.Item key={paciente.id} label={`${paciente.nombre} ${paciente.apellido}`} value={paciente.id} />
-            ))}
-          </Picker>
-        </View>
-        <Text style={styles.label}>Descripción:</Text>
-        <TextInput
-          style={styles.textArea}
-          multiline
-          numberOfLines={4}
-          onChangeText={(value) => handleInputChange('descripcion', value)}
-          value={tratamientoInfo.descripcion}
-        />
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Confirmar</Text>
-        </TouchableOpacity>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Añadir Tratamiento</Text>
       </View>
-      <Text style={styles.header}>Tratamientos</Text>
-      {tratamientos.length > 0 ? (
-        tratamientos.map((tratamiento) => (
-          <View key={tratamiento.id} style={styles.tratamientoItem}>
-            <Text style={styles.tratamientoDate}>Nombre: {tratamiento.nombreTratamiento}</Text>
-            <Text><Text style={styles.bold}>Descripción:</Text> {tratamiento.descripcion}</Text>
-            <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(tratamiento.id)}>
-              <Text style={styles.editButtonText}>Editar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(tratamiento.id)}>
-              <Text style={styles.deleteButtonText}>Eliminar</Text>
-            </TouchableOpacity>
+      <View style={styles.content}>
+        <View style={styles.form}>
+          <Text style={styles.label}>Nombre del Tratamiento:</Text>
+          <TextInput
+            style={styles.textArea}
+            value={tratamientoInfo.nombreTratamiento}
+            onChangeText={(value) => handleInputChange('nombreTratamiento', value)}
+            placeholder="Nombre del Tratamiento"
+          />
+          <Text style={styles.label}>Seleccionar Paciente:</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={selectedPaciente}
+              onValueChange={(itemValue) => setSelectedPaciente(itemValue)}
+              style={styles.picker}
+              itemStyle={styles.pickerItem}
+            >
+              <Picker.Item label="Seleccione un paciente" value="" />
+              {pacientes.map((paciente) => (
+                <Picker.Item key={paciente.id} label={`${paciente.nombre} ${paciente.apellido}`} value={paciente.id} />
+              ))}
+            </Picker>
           </View>
-        ))
-      ) : (
-        <Text style={styles.noTratamientos}>No hay tratamientos disponibles.</Text>
-      )}
+          <Text style={styles.label}>Descripción:</Text>
+          <TextInput
+            style={styles.textArea}
+            multiline
+            numberOfLines={4}
+            onChangeText={(value) => handleInputChange('descripcion', value)}
+            value={tratamientoInfo.descripcion}
+          />
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+            <Text style={styles.submitButtonText}>Confirmar</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Tratamientos</Text>
+        </View>
+        {tratamientos.length > 0 ? (
+          tratamientos.map((tratamiento) => (
+            <View key={tratamiento.id} style={styles.tratamientoItem}>
+              <Text style={styles.tratamientoDate}>Nombre: {tratamiento.nombreTratamiento}</Text>
+              <Text><Text style={styles.bold}>Descripción:</Text> {tratamiento.descripcion}</Text>
+              <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(tratamiento.id)}>
+                <Text style={styles.editButtonText}>Editar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(tratamiento.id)}>
+                <Text style={styles.deleteButtonText}>Eliminar</Text>
+              </TouchableOpacity>
+            </View>
+          ))
+        ) : (
+          <Text style={styles.noTratamientos}>No hay tratamientos disponibles.</Text>
+        )}
+      </View>
     </ScrollView>
   );
 };
@@ -152,19 +158,27 @@ const MedicoTratamientos = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#F7FFF7',
+    backgroundColor: '#FDFEFE',
+  },
+  headerContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#1E6793',
+    borderRadius: 10,
+    marginBottom: 20,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#2D6A4F',
+    color: '#FFFFFF',
     textAlign: 'center',
+  },
+  content: {
+    padding: 20,
   },
   form: {
     marginBottom: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     padding: 20,
     borderRadius: 10,
     shadowColor: '#000',
@@ -176,29 +190,28 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 10,
-    color: '#2D6A4F',
+    color: '#333',
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: '#95D5B2',
+    borderColor: '#1E6793',
     borderRadius: 5,
     marginBottom: 20,
     overflow: 'hidden',
     justifyContent: 'center',
+    backgroundColor: '#fff',
   },
   picker: {
     height: 50,
-    backgroundColor: '#fff',
     justifyContent: 'center',
   },
   pickerItem: {
     height: 50,
-    color: '#2D6A4F',
     textAlign: 'center',
   },
   textArea: {
     height: 100,
-    borderColor: '#95D5B2',
+    borderColor: '#1E6793',
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
@@ -207,7 +220,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   submitButton: {
-    backgroundColor: '#1E6793',
+    backgroundColor: '#1D8348',
     paddingVertical: 15,
     borderRadius: 5,
     alignItems: 'center',
@@ -221,18 +234,25 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 15,
     borderRadius: 10,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   tratamientoDate: {
     fontWeight: 'bold',
     marginBottom: 5,
+    color: '#333',
   },
   bold: {
     fontWeight: 'bold',
+    color: '#333',
   },
   editButton: {
     marginTop: 10,
-    backgroundColor: '#1E6793',
+    backgroundColor: '#FFA500',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,

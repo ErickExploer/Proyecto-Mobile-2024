@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Alert, BackHandler, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity, Image } from 'react-native';
 import { updateMedicoInfo, getMedicoInfo, deleteMedico } from '../api';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
-import UserIcon from '../../img/UserIcon.png';
 
 const MedicoEdit = () => {
   const [userInfo, setUserInfo] = useState({
@@ -81,49 +80,50 @@ const MedicoEdit = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Editar Perfil</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre"
-        value={userInfo.nombre}
-        onChangeText={(value) => handleInputChange('nombre', value)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Apellido"
-        value={userInfo.apellido}
-        onChangeText={(value) => handleInputChange('apellido', value)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Especialidad"
-        value={userInfo.especialidad}
-        onChangeText={(value) => handleInputChange('especialidad', value)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Teléfono"
-        value={userInfo.telefono}
-        onChangeText={(value) => handleInputChange('telefono', value)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Edad"
-        value={userInfo.edad}
-        onChangeText={(value) => handleInputChange('edad', value)}
-      />
-      <Button title="Actualizar" onPress={handleUpdate} />
-      <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
-        <Text style={styles.buttonText}>Eliminar</Text>
-      </TouchableOpacity>
-      <View style={styles.preview}>
-        <Image source={UserIcon} style={styles.image} />
-        <Text style={styles.infoText}><Text style={styles.bold}>Nombre:</Text> {userInfo.nombre}</Text>
-        <Text style={styles.infoText}><Text style={styles.bold}>Apellido:</Text> {userInfo.apellido}</Text>
-        <Text style={styles.infoText}><Text style={styles.bold}>Especialidad:</Text> {userInfo.especialidad}</Text>
-        <Text style={styles.infoText}><Text style={styles.bold}>Teléfono:</Text> {userInfo.telefono}</Text>
-        <Text style={styles.infoText}><Text style={styles.bold}>Edad:</Text> {userInfo.edad}</Text>
+      <View style={styles.profileContainer}>
+        <Image source={require('../../img/UserIcon.png')} style={styles.profileImage} />
+        <Text style={styles.nameText}>{userInfo.nombre} {userInfo.apellido}</Text>
+        <Text style={styles.emailText}>{userInfo.email}</Text>
+        <Text style={styles.locationText}>Lima, Peru</Text>
       </View>
+      <View style={styles.infoContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Nombre"
+          value={userInfo.nombre}
+          onChangeText={(value) => handleInputChange('nombre', value)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Apellido"
+          value={userInfo.apellido}
+          onChangeText={(value) => handleInputChange('apellido', value)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Especialidad"
+          value={userInfo.especialidad}
+          onChangeText={(value) => handleInputChange('especialidad', value)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Teléfono"
+          value={userInfo.telefono}
+          onChangeText={(value) => handleInputChange('telefono', value)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Edad"
+          value={userInfo.edad}
+          onChangeText={(value) => handleInputChange('edad', value)}
+        />
+      </View>
+      <TouchableOpacity style={styles.saveButton} onPress={handleUpdate}>
+        <Text style={styles.saveButtonText}>Guardar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleDelete} style={styles.deleteButton}>
+        <Text style={styles.deleteButtonText}>Eliminar Perfil</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -132,53 +132,65 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F7FFF7',
-    justifyContent: 'center',
+    backgroundColor: '#FDFEFE',
   },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  profileContainer: {
+    alignItems: 'center',
     marginBottom: 20,
-    color: '#2D6A4F',
-    textAlign: 'center',
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: 10,
+  },
+  nameText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  emailText: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 5,
+  },
+  locationText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  infoContainer: {
+    marginBottom: 20,
   },
   input: {
     height: 40,
-    borderColor: '#95D5B2',
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
     borderRadius: 5,
+    backgroundColor: '#fff',
+  },
+  saveButton: {
+    backgroundColor: '#1D8348',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   deleteButton: {
-    marginTop: 20,
     backgroundColor: '#FF6B6B',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 5,
     alignItems: 'center',
   },
-  buttonText: {
+  deleteButtonText: {
     color: '#fff',
-  },
-  preview: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  image: {
-    height: 100,
-    width: 100,
-    marginBottom: 20,
-  },
-  infoText: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: '#333',
-    fontFamily: 'Helvetica',
-  },
-  bold: {
     fontWeight: 'bold',
-    color: '#555',
   },
 });
 

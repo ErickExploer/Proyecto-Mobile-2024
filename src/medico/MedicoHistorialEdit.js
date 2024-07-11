@@ -73,7 +73,9 @@ const MedicoHistorialEdit = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>Editar Historial</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Editar Historial</Text>
+      </View>
       <View style={styles.form}>
         <Text style={styles.label}>Fecha de la consulta</Text>
         <TouchableOpacity onPress={() => setShowDatePicker(true)}>
@@ -106,27 +108,32 @@ const MedicoHistorialEdit = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7FFF7',
-    padding: 20,
+    backgroundColor: '#FDFEFE',
+  },
+  headerContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#1E6793',
+    borderRadius: 10,
+    marginBottom: 20,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#2D6A4F',
+    color: '#FFFFFF',
     textAlign: 'center',
   },
   form: {
     marginBottom: 20,
+    paddingHorizontal: 20,
   },
   label: {
     fontSize: 16,
     marginBottom: 5,
-    color: '#2D6A4F',
   },
   dateText: {
     fontSize: 18,
-    color: '#2D6A4F',
+    color: '#1E6793',
     marginBottom: 20,
     padding: 10,
     backgroundColor: '#fff',
@@ -135,7 +142,7 @@ const styles = StyleSheet.create({
   },
   textArea: {
     height: 100,
-    borderColor: '#95D5B2',
+    borderColor: '#1E6793',
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
@@ -144,7 +151,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   button: {
-    backgroundColor: '#2D6A4F',
+    backgroundColor: '#1D8348',
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',

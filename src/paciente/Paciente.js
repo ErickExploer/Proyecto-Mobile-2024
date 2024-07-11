@@ -105,7 +105,7 @@ const Paciente = ({ setIsLoggedIn }) => {
               <Text style={styles.editButtonText}>Editar</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.joinButton} onPress={() => handleNavigate('PacienteConsulta')}>
-              <Text style={styles.joinButtonText}>Ir a Consulta</Text>
+              <Text style={styles.joinButtonText}>CONSULTA RAPIDA</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   editButton: {
-    backgroundColor: '#1D8348',
+    backgroundColor: '#FFA500',
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 5,
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   joinButton: {
-    backgroundColor: '#FFA500',
+    backgroundColor: '#7D3C98',
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 5,

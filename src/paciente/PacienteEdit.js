@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F7FFF7',
+    backgroundColor: '#FDFEFE',
   },
   profileContainer: {
     alignItems: 'center',

@@ -83,11 +83,11 @@ const MedicoStack = ({ setIsLoggedIn }) => (
     >
       {props => <Medico {...props} setIsLoggedIn={setIsLoggedIn} />}
     </Stack.Screen>
-    <Stack.Screen name="MedicoEdit" component={MedicoEdit} />
-    <Stack.Screen name="MedicoHistorial" component={MedicoHistorial} />
-    <Stack.Screen name="MedicoHistorialEdit" component={MedicoHistorialEdit} />
-    <Stack.Screen name="MedicoTratamientos" component={MedicoTratamientos} />
-    <Stack.Screen name="MedicoTratamientosEdit" component={MedicoTratamientosEdit} />
+    <Stack.Screen name="MedicoEdit" component={MedicoEdit} options={{ headerShown: false }} />
+    <Stack.Screen name="MedicoHistorial" component={MedicoHistorial}  options={{ headerShown: false }}/>
+    <Stack.Screen name="MedicoHistorialEdit" component={MedicoHistorialEdit}options={{ headerShown: false }} />
+    <Stack.Screen name="MedicoTratamientos" component={MedicoTratamientos}options={{ headerShown: false }} />
+    <Stack.Screen name="MedicoTratamientosEdit" component={MedicoTratamientosEdit} options={{ headerShown: false }}/>
   </Stack.Navigator>
 );
 
@@ -171,8 +171,8 @@ const MedicoTabNavigator = ({ setIsLoggedIn }) => (
       tabBarStyle: {
         backgroundColor: '#1E6793',
         paddingTop: 5,
-        paddingBottom: 10,
-        height: 60,
+        paddingBottom: 20,
+        height: 80,
       },
       tabBarLabelStyle: {
         fontSize: 12,
