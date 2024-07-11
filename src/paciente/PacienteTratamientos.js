@@ -53,7 +53,8 @@ const PacienteTratamientos = () => {
     return numero ? parseInt(numero[0]) : null;
   };
 
-  const configurarAlarma = (intervaloEnSegundos) => {
+  const configurarAlarma = (intervaloEnHoras) => {
+    const intervaloEnMilisegundos = intervaloEnHoras * 60 * 60 * 1000; // Convertir horas a milisegundos
     const intervalId = setInterval(async () => {
       for (let i = 0; i < 5; i++) { // Vibrar 5 veces
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
@@ -61,7 +62,7 @@ const PacienteTratamientos = () => {
         await new Promise(resolve => setTimeout(resolve, 500)); // Esperar 500ms entre vibraciones
       }
       playSound();
-    }, intervaloEnSegundos * 1000);
+    }, intervaloEnMilisegundos);
     return intervalId;
   };
 

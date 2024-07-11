@@ -17,18 +17,6 @@ const setAuthToken = async () => {
   }
 };
 
-const handleApiError = (error, navigation) => {
-  if (error.response) {
-    if (error.response.status === 400) {
-      navigation.navigate('Error', { errorCode: 400, errorMessage: 'Bad Request' });
-    } else {
-      navigation.navigate('Error', { errorCode: error.response.status, errorMessage: error.response.data.message });
-    }
-  } else {
-    navigation.navigate('Error', { errorCode: 500, errorMessage: 'Internal Server Error' });
-  }
-  throw error;
-};
 
 // Auth
 export const login = async (email, password) => {
@@ -48,8 +36,7 @@ export const getUserRole = async () => {
     const response = await api.get('/auth');
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch user role:', error);
-    throw error;
+  
   }
 };
 
@@ -62,8 +49,7 @@ export const getPacienteInfo = async (token) => {
       const response = await api.get('/paciente/me');
       return response.data;
     } catch (error) {
-      console.error('Failed to fetch paciente info:', error);
-      throw error;
+     
     }
   };
   
@@ -74,8 +60,7 @@ export const getPacienteInfo = async (token) => {
       const response = await api.get('/medico/me');
       return response.data;
     } catch (error) {
-      console.error('Failed to fetch medico info:', error);
-      throw error;
+      
     }
   };    
 

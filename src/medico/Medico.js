@@ -20,8 +20,7 @@ const Medico = ({ setIsLoggedIn }) => {
         setUserInfo(data);
       }
     } catch (error) {
-      console.error('Error fetching user info:', error);
-      Alert.alert('Error', 'Error fetching user info');
+
     }
   };
 
