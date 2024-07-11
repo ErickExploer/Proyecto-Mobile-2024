@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { getPacienteInfo, getTratamientos } from '../api'; // Asegúrate de que la ruta sea correcta
 import * as SecureStore from 'expo-secure-store';
+import * as Haptics from 'expo-haptics';
+import { Audio } from 'expo-av';
 
 const PacienteTratamientos = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [tratamientos, setTratamientos] = useState([]);
+  const [numeros, setNumeros] = useState([]);
+  const [sound, setSound] = useState(null);
+  const intervalRefs = useRef([]);
 
   const fetchUserInfo = async () => {
     try {
@@ -26,10 +31,71 @@ const PacienteTratamientos = () => {
       if (token && userInfo) {
         const tratamientosData = await getTratamientos(userInfo.id, token);
         setTratamientos(tratamientosData);
+
+        // Extraer los números de tratamiento
+        const numerosExtraidos = tratamientosData.map(tratamiento => extraerNumero(tratamiento.descripcion)).filter(num => num !== null);
+        setNumeros(numerosExtraidos);
+
+        // Configurar alarmas para cada número extraído
+        numerosExtraidos.forEach(numero => {
+          const intervalId = configurarAlarma(numero);
+          intervalRefs.current.push(intervalId);
+        });
       }
     } catch (error) {
       console.error('Error fetching tratamientos:', error);
       Alert.alert('Error', 'Error fetching tratamientos');
+    }
+  };
+
+  const extraerNumero = (descripcion) => {
+    const numero = descripcion.match(/\d+/);
+    return numero ? parseInt(numero[0]) : null;
+  };
+
+  const configurarAlarma = (intervaloEnSegundos) => {
+    const intervalId = setInterval(async () => {
+      for (let i = 0; i < 5; i++) { // Vibrar 5 veces
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+        await new Promise(resolve => setTimeout(resolve, 500)); // Esperar 500ms entre vibraciones
+      }
+      playSound();
+    }, intervaloEnSegundos * 1000);
+    return intervalId;
+  };
+
+  const playSound = async () => {
+    try {
+      if (sound) {
+        await sound.unloadAsync();
+      }
+      console.log("Loading sound...");
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        require('../../assets/alarma.mp3'), 
+        {
+          shouldPlay: true,
+          staysActiveInBackground: true,
+          isLooping: false,
+        }
+      );
+      console.log("Sound loaded");
+      setSound(newSound);
+      await newSound.playAsync();
+      console.log("Sound is playing");
+    } catch (error) {
+      console.error('Error playing sound:', error);
+      Alert.alert('Error', 'Error playing sound');
+    }
+  };
+
+  const stopAlarms = () => {
+    intervalRefs.current.forEach(intervalId => clearInterval(intervalId));
+    intervalRefs.current = [];
+    if (sound) {
+      sound.stopAsync().then(() => {
+        sound.unloadAsync();
+      });
     }
   };
 
@@ -42,6 +108,14 @@ const PacienteTratamientos = () => {
       fetchTratamientos();
     }
   }, [userInfo]);
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
   return (
     <ScrollView style={styles.container}>
@@ -64,6 +138,9 @@ const PacienteTratamientos = () => {
         )}
         <TouchableOpacity style={styles.loadMoreButton}>
           <Text style={styles.loadMoreButtonText}>Cargar más...</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.stopButton} onPress={stopAlarms}>
+          <Text style={styles.stopButtonText}>Detener Alarma</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -142,22 +219,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  editButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#95D5B2',
+  stopButton: {
+    backgroundColor: '#E74C3C',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 20,
   },
-  editIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 10,
-    tintColor: 'white',
-  },
-  editButtonText: {
+  stopButtonText: {
     color: 'white',
+    fontSize: 18,
     fontWeight: 'bold',
   },
 });
