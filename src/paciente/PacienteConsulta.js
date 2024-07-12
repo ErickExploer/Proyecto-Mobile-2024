@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, Alert } from 'react-native';
-import { symptomList, diseaseDatabase } from './Data'; // Asegúrate de tener los datos correctos
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Modal, Alert, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import prompts from './prompts_clean.json'; // Ajusta la ruta a tu archivo JSON
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const WarningDialog = ({ visible, onClose }) => {
   return (
@@ -25,112 +27,102 @@ const WarningDialog = ({ visible, onClose }) => {
   );
 };
 
-const CustomCheckBox = ({ value, onValueChange }) => {
-  return (
-    <TouchableOpacity onPress={onValueChange} style={styles.checkboxContainer}>
-      <View style={[styles.checkbox, value && styles.checkedCheckbox]}>
-        {value && <Text style={styles.checkmark}>✔️</Text>}
-      </View>
-    </TouchableOpacity>
-  );
-};
+const PacienteConsulta = () => {
+  const [inputText, setInputText] = useState('');
+  const [responseText, setResponseText] = useState('');
+  const [warningOpen, setWarningOpen] = useState(false);
+  const [chat, setChat] = useState(null);
+  const navigation = useNavigation();
 
-const SymptomForm = ({ onPredict }) => {
-  const [selectedSymptoms, setSelectedSymptoms] = useState({});
+  // Reemplaza 'YOUR_API_KEY' con tu clave de API real
+  const API_KEY = 'AIzaSyB_V2VwT5LSOUScE7g0lBHUh8bxZXkayX0';
+  const genAI = new GoogleGenerativeAI(API_KEY);
 
-  const handleCheckboxChange = (symptom) => {
-    setSelectedSymptoms({
-      ...selectedSymptoms,
-      [symptom]: !selectedSymptoms[symptom],
-    });
-  };
+  useEffect(() => {
+    const initializeChat = async () => {
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro-latest' });
+      const initialChat = model.startChat({
+        history: [
+          {
+            role: 'user',
+            parts: [{ text: 'Hola, tengo 2 perros en mi casa.' }],
+          },
+          {
+            role: 'model',
+            parts: [{ text: 'Encantado de conocerte. ¿Qué te gustaría saber?' }],
+          },
+        ],
+        generationConfig: {
+          maxOutputTokens: 100,
+        },
+      });
+      setChat(initialChat);
+    };
+    initializeChat();
+  }, []);
 
-  const handleSubmit = () => {
-    const symptoms = Object.keys(selectedSymptoms).filter(symptom => selectedSymptoms[symptom]);
-    if (symptoms.length === 0) {
-      Alert.alert('Error', 'Por favor, seleccione al menos un síntoma.');
+  const handleSubmit = async () => {
+    if (!inputText.trim()) {
+      Alert.alert('Error', 'Por favor, ingrese sus síntomas.');
       return;
     }
-    onPredict(symptoms);
-  };
 
-  return (
-    <ScrollView style={styles.formContainer}>
-      <Text style={styles.formLabel}>Seleccione sus síntomas:</Text>
-      {Object.entries(symptomList).map(([category, symptoms]) => (
-        <View key={category} style={styles.category}>
-          <Text style={styles.categoryTitle}>{category}</Text>
-          {symptoms.map((symptom) => (
-            <View key={symptom} style={styles.checkboxContainer}>
-              <CustomCheckBox
-                value={!!selectedSymptoms[symptom]}
-                onValueChange={() => handleCheckboxChange(symptom)}
-              />
-              <Text style={styles.label}>{symptom}</Text>
-            </View>
-          ))}
-        </View>
-      ))}
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Predecir</Text>
-      </TouchableOpacity>
-    </ScrollView>
-  );
-};
+    setWarningOpen(true);
 
-const PredictionResult = ({ result }) => {
-  return (
-    <ScrollView>
-      <Text style={styles.resultTitle}>Posibles Enfermedades:</Text>
-      {result.map((item, index) => (
-        <View key={index} style={styles.resultItem}>
-          <Text style={styles.resultItemText}>{`${item.disease} (Confianza: ${item.matchScore.toFixed(2)}%)`}</Text>
-          <Text style={styles.resultItemText}>Síntomas coincidentes: {item.matchedSymptoms.join(', ')}</Text>
-          <Text style={styles.resultItemText}>Descripción: {item.description}</Text>
-        </View>
-      ))}
-    </ScrollView>
-  );
-};
+    if (chat) {
+      try {
+        const result = await chat.sendMessage(inputText);
+        const response = await result.response;
+        const aiResponse = await response.text();
+        // Match inputText with prompts from JSON
+        const inputSymptoms = inputText.toLowerCase().split(',').map(s => s.trim());
+        console.log('Input Symptoms:', inputSymptoms);
 
-const PacienteConsulta = () => {
-  const [result, setResult] = useState([]);
-  const [warningOpen, setWarningOpen] = useState(false);
+        const matchedPrompt = prompts.find(prompt =>
+          prompt.input && prompt.input.every(symptom => inputSymptoms.includes(symptom))
+        );
+        console.log('Matched Prompt:', matchedPrompt);
 
-  const symptomWeights = {
-    "fiebre": 1.2,
-    "tos": 1.1,
-    // Agrega pesos a otros síntomas si es necesario
-  };
-
-  const handlePredict = (symptoms) => {
-    const matchedDiseases = [];
-
-    for (const [disease, diseaseData] of Object.entries(diseaseDatabase)) {
-      const { symptoms: diseaseSymptoms, description } = diseaseData;
-      const matchedSymptoms = diseaseSymptoms.filter(symptom => symptoms.includes(symptom));
-      if (matchedSymptoms.length > 0) {
-        const totalWeight = diseaseSymptoms.reduce((acc, symptom) => acc + (symptomWeights[symptom] || 1), 0);
-        const matchScore = (matchedSymptoms.reduce((acc, symptom) => acc + (symptomWeights[symptom] || 1), 0) / totalWeight) * 100;
-        matchedDiseases.push({ disease, matchedSymptoms, matchScore, description });
+        if (matchedPrompt) {
+          setResponseText(matchedPrompt.output);
+        } else {
+          setResponseText(aiResponse + ' - Saipe');
+        }
+      } catch (error) {
+        console.error('Error al generar contenido:', error);
+        setResponseText('Hubo un error al procesar su solicitud. Inténtelo nuevamente más tarde. - Saipe');
       }
     }
-
-    matchedDiseases.sort((a, b) => b.matchScore - a.matchScore);
-    setResult(matchedDiseases);
-    setWarningOpen(true);
   };
 
   const handleCloseWarning = () => {
     setWarningOpen(false);
   };
 
+  const handleBack = () => {
+    navigation.navigate('Paciente');
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Predicción de Enfermedades</Text>
-      <SymptomForm onPredict={handlePredict} />
-      {result.length > 0 && <PredictionResult result={result} />}
-      <WarningDialog visible={warningOpen} onClose={handleCloseWarning} />
+      <Text style={styles.title}>Consulta de Síntomas</Text>
+      <ScrollView>
+        <TextInput
+          style={styles.input}
+          multiline
+          placeholder="Ingrese sus síntomas aquí..."
+          value={inputText}
+          onChangeText={setInputText}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Enviar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+          <Text style={styles.buttonText}>Regresar</Text>
+        </TouchableOpacity>
+        <WarningDialog visible={warningOpen} onClose={handleCloseWarning} />
+        {responseText ? <Text style={styles.responseText}>{responseText}</Text> : null}
+      </ScrollView>
     </View>
   );
 };
@@ -139,7 +131,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F7FFF7',
+    backgroundColor: '#FDFEFE',
   },
   title: {
     fontSize: 24,
@@ -148,47 +140,16 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     color: '#2D6A4F',
   },
-  formContainer: {
-    marginBottom: 20,
-  },
-  formLabel: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: '#2D6A4F',
-  },
-  category: {
-    marginBottom: 15,
-  },
-  categoryTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#1B4332',
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  checkbox: {
-    width: 24,
-    height: 24,
-    borderWidth: 2,
+  input: {
+    height: 150,
     borderColor: '#2D6A4F',
-    borderRadius: 4,
-    marginRight: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkedCheckbox: {
-    backgroundColor: '#2D6A4F',
-  },
-  checkmark: {
-    color: 'white',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    textAlignVertical: 'top',
+    backgroundColor: '#fff',
     fontSize: 16,
-  },
-  label: {
-    fontSize: 16,
-    color: '#2D6A4F',
   },
   button: {
     backgroundColor: '#2D6A4F',
@@ -196,28 +157,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 20,
+    marginBottom: 10,
+  },
+  backButton: {
+    backgroundColor: '#7D3C98',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: 'center',
   },
   buttonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  resultTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 10,
-    color: '#1B4332',
-  },
-  resultItem: {
-    marginBottom: 10,
-    padding: 10,
-    backgroundColor: '#D8F3DC',
-    borderRadius: 5,
-  },
-  resultItemText: {
-    fontSize: 16,
-    color: '#1B4332',
   },
   dialogOverlay: {
     flex: 1,
@@ -253,6 +205,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  responseText: {
+    marginTop: 20,
+    fontSize: 16,
+    color: '#1B4332',
   },
 });
 
