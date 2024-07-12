@@ -1,0 +1,338 @@
+[
+    {
+        "input": ["cansado", "dolor de cabeza", "fiebre"],
+        "output": "Podrías estar sufriendo de una gripe. Te recomendaría reposo, mucha hidratación y, si los síntomas persisten o empeoran, consulta nuevamente para evaluar la necesidad de medicamentos adicionales."
+    },
+    {
+        "input": ["cansado dolor de cabeza fiebre"],
+        "output": "Podrías estar sufriendo de una gripe. Te recomendaría reposo, mucha hidratación y, si los síntomas persisten o empeoran, consulta nuevamente para evaluar la necesidad de medicamentos adicionales."
+    },
+    {
+        "input": ["tos seca", "dificultad para respirar", "fiebre"],
+        "output": "Estos síntomas podrían indicar bronquitis. Es importante que evites el humo y otros irritantes, descanses y bebas líquidos en abundancia. Si la dificultad para respirar empeora, busca atención médica inmediata."
+    },
+    {
+        "input": ["tos seca dificultad para respirar fiebre"],
+        "output": "Estos síntomas podrían indicar bronquitis. Es importante que evites el humo y otros irritantes, descanses y bebas líquidos en abundancia. Si la dificultad para respirar empeora, busca atención médica inmediata."
+    },
+    {
+        "input": ["ardor en el pecho", "sabor amargo", "después de comer"],
+        "output": "Estos síntomas podrían ser indicativos de reflujo ácido. Te recomendaría evitar comidas picantes o grasosas, comer porciones pequeñas y frecuentes, y no acostarte inmediatamente después de comer. Si los síntomas persisten, consulta a un médico."
+    },
+    {
+        "input": ["ardor en el pecho sabor amargo después de comer"],
+        "output": "Estos síntomas podrían ser indicativos de reflujo ácido. Te recomendaría evitar comidas picantes o grasosas, comer porciones pequeñas y frecuentes, y no acostarte inmediatamente después de comer. Si los síntomas persisten, consulta a un médico."
+    },
+    {
+        "input": ["picazón en el cuerpo", "erupciones rojas"],
+        "output": "Esto podría ser una señal de una alergia. Sería útil identificar y evitar el alérgeno desencadenante y considerar el uso de antihistamínicos para aliviar los síntomas. Si la picazón y las erupciones no mejoran, una consulta adicional sería recomendable."
+    },
+    {
+        "input": ["picazón en el cuerpo erupciones rojas"],
+        "output": "Esto podría ser una señal de una alergia. Sería útil identificar y evitar el alérgeno desencadenante y considerar el uso de antihistamínicos para aliviar los síntomas. Si la picazón y las erupciones no mejoran, una consulta adicional sería recomendable."
+    },
+    {
+        "input": ["dolor de estómago", "diarrea", "fatigado"],
+        "output": "Estos síntomas podrían ser indicativos de enfermedad celíaca o síndrome del intestino irritable. Sería recomendable una consulta más detallada para realizar pruebas específicas y determinar el tratamiento adecuado."
+    },
+    {
+        "input": ["dolor de estómago diarrea fatigado"],
+        "output": "Estos síntomas podrían ser indicativos de enfermedad celíaca o síndrome del intestino irritable. Sería recomendable una consulta más detallada para realizar pruebas específicas y determinar el tratamiento adecuado."
+    },
+    {
+        "input": ["fiebre alta", "dolor en las articulaciones", "erupción cutánea"],
+        "output": "Podrías estar presentando síntomas de dengue. Es crucial que busques atención médica inmediatamente para confirmar el diagnóstico y recibir el tratamiento adecuado."
+    },
+    {
+        "input": ["fiebre alta dolor en las articulaciones erupción cutánea"],
+        "output": "Podrías estar presentando síntomas de dengue. Es crucial que busques atención médica inmediatamente para confirmar el diagnóstico y recibir el tratamiento adecuado."
+    },
+    {
+        "input": ["dolor de garganta", "dificultad para tragar", "fiebre"],
+        "output": "Podrías tener una faringitis. Te recomendaría descansar, mantenerte hidratado, y considerar el uso de analgésicos para el dolor. Si los síntomas empeoran o no mejoran en unos días, consulta nuevamente."
+    },
+    {
+        "input": ["dolor de garganta dificultad para tragar fiebre"],
+        "output": "Podrías tener una faringitis. Te recomendaría descansar, mantenerte hidratado, y considerar el uso de analgésicos para el dolor. Si los síntomas empeoran o no mejoran en unos días, consulta nuevamente."
+    },
+    {
+        "input": ["dolor de cabeza", "nariz congestionada", "fiebre"],
+        "output": "Estos síntomas podrían indicar una sinusitis. Te recomendaría usar un humidificador, inhalar vapor y tomar descongestionantes. Si los síntomas persisten, consulta para una evaluación adicional."
+    },
+    {
+        "input": ["dolor de cabeza nariz congestionada fiebre"],
+        "output": "Estos síntomas podrían indicar una sinusitis. Te recomendaría usar un humidificador, inhalar vapor y tomar descongestionantes. Si los síntomas persisten, consulta para una evaluación adicional."
+    },
+    {
+        "input": ["dolor de estómago", "náuseas", "vómitos"],
+        "output": "Podrías estar sufriendo de una gastritis. Te recomendaría evitar comidas picantes y grasosas, comer en porciones pequeñas y frecuentes, y considerar el uso de antiácidos. Si los síntomas no mejoran, consulta nuevamente."
+    },
+    {
+        "input": ["dolor de estómago náuseas vómitos"],
+        "output": "Podrías estar sufriendo de una gastritis. Te recomendaría evitar comidas picantes y grasosas, comer en porciones pequeñas y frecuentes, y considerar el uso de antiácidos. Si los síntomas no mejoran, consulta nuevamente."
+    },
+    {
+        "input": ["congestión", "picazón en los ojos", "estornudos"],
+        "output": "Parece que tienes alergia estacional. Te recomendaría mantener las ventanas cerradas, usar filtros de aire y considerar antihistamínicos para aliviar los síntomas."
+    },
+    {
+        "input": ["congestión picazón en los ojos estornudos"],
+        "output": "Parece que tienes alergia estacional. Te recomendaría mantener las ventanas cerradas, usar filtros de aire y considerar antihistamínicos para aliviar los síntomas."
+    },
+    {
+        "input": ["dolor de pecho", "dificultad para respirar", "sudoración"],
+        "output": "Estos síntomas podrían indicar un ataque al corazón. Busca atención médica de inmediato."
+    },
+    {
+        "input": ["dolor de pecho dificultad para respirar sudoración"],
+        "output": "Estos síntomas podrían indicar un ataque al corazón. Busca atención médica de inmediato."
+    },
+    {
+        "input": ["fatiga", "pérdida de peso", "aumento de la sed"],
+        "output": "Estos síntomas podrían indicar diabetes. Te recomendaría consultar a un médico para una evaluación y posible tratamiento."
+    },
+    {
+        "input": ["fatiga pérdida de peso aumento de la sed"],
+        "output": "Estos síntomas podrían indicar diabetes. Te recomendaría consultar a un médico para una evaluación y posible tratamiento."
+    },
+    {
+        "input": ["fiebre", "dolor muscular", "erupción cutánea"],
+        "output": "Estos síntomas podrían ser indicativos de chikungunya. Te recomendaría reposo, hidratación y analgésicos. Consulta a un médico para confirmación y tratamiento adecuado."
+    },
+    {
+        "input": ["fiebre dolor muscular erupción cutánea"],
+        "output": "Estos síntomas podrían ser indicativos de chikungunya. Te recomendaría reposo, hidratación y analgésicos. Consulta a un médico para confirmación y tratamiento adecuado."
+    },
+    {
+        "input": ["tos persistente", "sangre en el esputo", "pérdida de peso"],
+        "output": "Estos síntomas podrían indicar tuberculosis. Busca atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["tos persistente sangre en el esputo pérdida de peso"],
+        "output": "Estos síntomas podrían indicar tuberculosis. Busca atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["fiebre", "dolor de garganta", "ganglios inflamados"],
+        "output": "Podrías estar presentando síntomas de mononucleosis infecciosa. Te recomendaría reposo, hidratación y analgésicos para el dolor. Consulta a un médico para confirmación y tratamiento adecuado."
+    },
+    {
+        "input": ["fiebre dolor de garganta ganglios inflamados"],
+        "output": "Podrías estar presentando síntomas de mononucleosis infecciosa. Te recomendaría reposo, hidratación y analgésicos para el dolor. Consulta a un médico para confirmación y tratamiento adecuado."
+    },
+    {
+        "input": ["dolor de cabeza", "rigidez en el cuello", "fiebre"],
+        "output": "Estos síntomas podrían indicar meningitis. Busca atención médica de inmediato."
+    },
+    {
+        "input": ["dolor de cabeza rigidez en el cuello fiebre"],
+        "output": "Estos síntomas podrían indicar meningitis. Busca atención médica de inmediato."
+    },
+    {
+        "input": ["dolor de cabeza", "visión borrosa", "náuseas"],
+        "output": "Podrías estar sufriendo de una migraña. Te recomendaría descansar en una habitación oscura y tranquila, mantenerte hidratado y tomar analgésicos de venta libre. Si las migrañas son frecuentes o severas, consulta a un médico."
+    },
+    {
+        "input": ["dolor de cabeza visión borrosa náuseas"],
+        "output": "Podrías estar sufriendo de una migraña. Te recomendaría descansar en una habitación oscura y tranquila, mantenerte hidratado y tomar analgésicos de venta libre. Si las migrañas son frecuentes o severas, consulta a un médico."
+    },
+    {
+        "input": ["dolor en el pecho", "palpitaciones", "dificultad para respirar"],
+        "output": "Podrías estar experimentando síntomas de arritmia. Te recomendaría buscar atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["dolor en el pecho palpitaciones dificultad para respirar"],
+        "output": "Podrías estar experimentando síntomas de arritmia. Te recomendaría buscar atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["dolor de espalda", "dolor de cuello", "rigidez"],
+        "output": "Podrías estar sufriendo de una contractura muscular. Te recomendaría hacer ejercicios de estiramiento, mantener una buena postura y considerar analgésicos si es necesario. Si el dolor persiste, consulta para una evaluación más detallada."
+    },
+    {
+        "input": ["dolor de espalda dolor de cuello rigidez"],
+        "output": "Podrías estar sufriendo de una contractura muscular. Te recomendaría hacer ejercicios de estiramiento, mantener una buena postura y considerar analgésicos si es necesario. Si el dolor persiste, consulta para una evaluación más detallada."
+    },
+    {
+        "input": ["dolor en las articulaciones", "rigidez matutina", "hinchazón"],
+        "output": "Estos síntomas podrían indicar artritis. Te recomendaría consultar a un médico para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["dolor en las articulaciones rigidez matutina hinchazón"],
+        "output": "Estos síntomas podrían indicar artritis. Te recomendaría consultar a un médico para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["dificultad para dormir", "cansancio", "irritabilidad"],
+        "output": "Podrías estar experimentando insomnio. Te recomendaría establecer una rutina regular de sueño, evitar el uso de dispositivos electrónicos antes de acostarte y crear un ambiente de sueño cómodo. Si los problemas de sueño persisten, consulta a un médico."
+    },
+    {
+        "input": ["dificultad para dormir cansancio irritabilidad"],
+        "output": "Podrías estar experimentando insomnio. Te recomendaría establecer una rutina regular de sueño, evitar el uso de dispositivos electrónicos antes de acostarte y crear un ambiente de sueño cómodo. Si los problemas de sueño persisten, consulta a un médico."
+    },
+    {
+        "input": ["dolor abdominal", "hinchazón", "gases"],
+        "output": "Estos síntomas podrían ser indicativos de síndrome del intestino irritable. Sería recomendable una consulta más detallada para realizar pruebas específicas y determinar el tratamiento adecuado."
+    },
+    {
+        "input": ["dolor abdominal hinchazón gases"],
+        "output": "Estos síntomas podrían ser indicativos de síndrome del intestino irritable. Sería recomendable una consulta más detallada para realizar pruebas específicas y determinar el tratamiento adecuado."
+    },
+    {
+        "input": ["fiebre", "erupción cutánea", "dolor en las articulaciones"],
+        "output": "Podrías estar presentando síntomas de chikungunya. Es crucial que busques atención médica para confirmar el diagnóstico y recibir el tratamiento adecuado."
+    },
+    {
+        "input": ["fiebre erupción cutánea dolor en las articulaciones"],
+        "output": "Podrías estar presentando síntomas de chikungunya. Es crucial que busques atención médica para confirmar el diagnóstico y recibir el tratamiento adecuado."
+    },
+    {
+        "input": ["dolor en el pecho", "falta de aliento", "sudoración"],
+        "output": "Estos síntomas podrían indicar un ataque cardíaco. Busca atención médica de inmediato."
+    },
+    {
+        "input": ["dolor en el pecho falta de aliento sudoración"],
+        "output": "Estos síntomas podrían indicar un ataque cardíaco. Busca atención médica de inmediato."
+    },
+    {
+        "input": ["mareos", "desmayos", "cansancio"],
+        "output": "Podrías estar experimentando anemia. Te recomendaría una dieta rica en hierro y, posiblemente, suplementos de hierro. Consulta a un médico para confirmar el diagnóstico y recibir un tratamiento adecuado."
+    },
+    {
+        "input": ["mareos desmayos cansancio"],
+        "output": "Podrías estar experimentando anemia. Te recomendaría una dieta rica en hierro y, posiblemente, suplementos de hierro. Consulta a un médico para confirmar el diagnóstico y recibir un tratamiento adecuado."
+    },
+    {
+        "input": ["dolor abdominal", "náuseas", "pérdida de apetito"],
+        "output": "Podrías estar sufriendo de una infección gastrointestinal. Es importante mantenerte hidratado, evitar alimentos sólidos hasta que los síntomas mejoren y consultar a un médico si la diarrea persiste o se vuelve severa."
+    },
+    {
+        "input": ["dolor abdominal náuseas pérdida de apetito"],
+        "output": "Podrías estar sufriendo de una infección gastrointestinal. Es importante mantenerte hidratado, evitar alimentos sólidos hasta que los síntomas mejoren y consultar a un médico si la diarrea persiste o se vuelve severa."
+    },
+    {
+        "input": ["dolor de cabeza", "visión borrosa", "cansancio"],
+        "output": "Podrías estar experimentando síntomas de fatiga ocular o esfuerzo visual. Te recomendaría tomar descansos regulares al trabajar frente a una pantalla, ajustar la iluminación y posiblemente revisar tu visión con un oftalmólogo."
+    },
+    {
+        "input": ["dolor de cabeza visión borrosa cansancio"],
+        "output": "Podrías estar experimentando síntomas de fatiga ocular o esfuerzo visual. Te recomendaría tomar descansos regulares al trabajar frente a una pantalla, ajustar la iluminación y posiblemente revisar tu visión con un oftalmólogo."
+    },
+    {
+        "input": ["dolor en el oído", "mareos", "fiebre"],
+        "output": "Podrías tener una infección de oído. Te recomendaría mantener el oído seco y consultar a un médico para obtener el tratamiento adecuado, que podría incluir antibióticos."
+    },
+    {
+        "input": ["dolor en el oído mareos fiebre"],
+        "output": "Podrías tener una infección de oído. Te recomendaría mantener el oído seco y consultar a un médico para obtener el tratamiento adecuado, que podría incluir antibióticos."
+    },
+    {
+        "input": ["fiebre", "erupción cutánea", "ojos rojos"],
+        "output": "Podrías estar presentando síntomas de sarampión. Es crucial que busques atención médica para confirmar el diagnóstico y recibir el tratamiento adecuado."
+    },
+    {
+        "input": ["fiebre erupción cutánea ojos rojos"],
+        "output": "Podrías estar presentando síntomas de sarampión. Es crucial que busques atención médica para confirmar el diagnóstico y recibir el tratamiento adecuado."
+    },
+    {
+        "input": ["dolor de garganta", "pérdida de apetito", "dolor abdominal"],
+        "output": "Podrías estar sufriendo de amigdalitis. Te recomendaría reposo, hidratación y analgésicos para el dolor. Si los síntomas empeoran, consulta a un médico."
+    },
+    {
+        "input": ["dolor de garganta pérdida de apetito dolor abdominal"],
+        "output": "Podrías estar sufriendo de amigdalitis. Te recomendaría reposo, hidratación y analgésicos para el dolor. Si los síntomas empeoran, consulta a un médico."
+    },
+    {
+        "input": ["tos", "fiebre", "dificultad para respirar"],
+        "output": "Estos síntomas podrían indicar neumonía. Te recomendaría buscar atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["tos fiebre dificultad para respirar"],
+        "output": "Estos síntomas podrían indicar neumonía. Te recomendaría buscar atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["dolor en el pecho", "tos con flema", "fiebre"],
+        "output": "Podrías estar sufriendo de bronquitis aguda. Es importante que descanses, bebas líquidos y evites el humo y otros irritantes. Si los síntomas empeoran, busca atención médica."
+    },
+    {
+        "input": ["dolor en el pecho tos con flema fiebre"],
+        "output": "Podrías estar sufriendo de bronquitis aguda. Es importante que descanses, bebas líquidos y evites el humo y otros irritantes. Si los síntomas empeoran, busca atención médica."
+    },
+    {
+        "input": ["cansancio", "pérdida de peso", "dificultad para respirar"],
+        "output": "Podrías estar presentando síntomas de insuficiencia cardíaca. Te recomendaría buscar atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["cansancio pérdida de peso dificultad para respirar"],
+        "output": "Podrías estar presentando síntomas de insuficiencia cardíaca. Te recomendaría buscar atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["dolor de espalda", "fiebre", "escalofríos"],
+        "output": "Podrías estar sufriendo de una infección renal. Es crucial que busques atención médica para confirmar el diagnóstico y recibir el tratamiento adecuado."
+    },
+    {
+        "input": ["dolor de espalda fiebre escalofríos"],
+        "output": "Podrías estar sufriendo de una infección renal. Es crucial que busques atención médica para confirmar el diagnóstico y recibir el tratamiento adecuado."
+    },
+    {
+        "input": ["dolor abdominal", "fiebre", "vómitos"],
+        "output": "Podrías estar sufriendo de apendicitis. Es crucial que busques atención médica de inmediato para confirmar el diagnóstico y recibir el tratamiento adecuado."
+    },
+    {
+        "input": ["dolor abdominal fiebre vómitos"],
+        "output": "Podrías estar sufriendo de apendicitis. Es crucial que busques atención médica de inmediato para confirmar el diagnóstico y recibir el tratamiento adecuado."
+    },
+    {
+        "input": ["dolor de cabeza", "náuseas", "visión doble"],
+        "output": "Podrías estar experimentando síntomas de una conmoción cerebral. Te recomendaría buscar atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["dolor de cabeza náuseas visión doble"],
+        "output": "Podrías estar experimentando síntomas de una conmoción cerebral. Te recomendaría buscar atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["dolor de pecho", "náuseas", "dificultad para respirar"],
+        "output": "Estos síntomas podrían indicar un ataque al corazón. Busca atención médica de inmediato."
+    },
+    {
+        "input": ["dolor de pecho náuseas dificultad para respirar"],
+        "output": "Estos síntomas podrían indicar un ataque al corazón. Busca atención médica de inmediato."
+    },
+    {
+        "input": ["dolor de garganta", "tos", "fiebre"],
+        "output": "Podrías estar sufriendo de una infección de garganta. Te recomendaría reposo, hidratación y analgésicos para el dolor. Si los síntomas empeoran, consulta a un médico."
+    },
+    {
+        "input": ["dolor de garganta tos fiebre"],
+        "output": "Podrías estar sufriendo de una infección de garganta. Te recomendaría reposo, hidratación y analgésicos para el dolor. Si los síntomas empeoran, consulta a un médico."
+    },
+    {
+        "input": ["fiebre", "tos", "dificultad para respirar"],
+        "output": "Podrías estar presentando síntomas de COVID-19. Te recomendaría aislarte y buscar atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["fiebre tos dificultad para respirar"],
+        "output": "Podrías estar presentando síntomas de COVID-19. Te recomendaría aislarte y buscar atención médica para una evaluación y tratamiento adecuado."
+    },
+    {
+        "input": ["dolor en el pecho", "sudoración", "mareos"],
+        "output": "Estos síntomas podrían indicar un ataque al corazón. Busca atención médica de inmediato."
+    },
+    {
+        "input": ["dolor en el pecho sudoración mareos"],
+        "output": "Estos síntomas podrían indicar un ataque al corazón. Busca atención médica de inmediato."
+    },
+    {
+        "input": ["dolor de cabeza", "dificultad para concentrarse", "cansancio"],
+        "output": "Podrías estar sufriendo de estrés. Te recomendaría técnicas de relajación, ejercicio regular y consultar a un médico o terapeuta para un manejo adecuado del estrés."
+    },
+    {
+        "input": ["dolor de cabeza dificultad para concentrarse cansancio"],
+        "output": "Podrías estar sufriendo de estrés. Te recomendaría técnicas de relajación, ejercicio regular y consultar a un médico o terapeuta para un manejo adecuado del estrés."
+    },
+    {
+        "input": ["dolor abdominal", "fiebre", "diarrea"],
+        "output": "Podrías estar sufriendo de una infección gastrointestinal. Es importante mantenerte hidratado y consultar a un médico si la diarrea persiste o se vuelve severa."
+    },
+    {
+        "input": ["dolor abdominal fiebre diarrea"],
+        "output": "Podrías estar sufriendo de una infección gastrointestinal. Es importante mantenerte hidratado y consultar a un médico si la diarrea persiste o se vuelve severa."
+    }
+]
