@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, Modal, Alert, Scro
 import { useNavigation } from '@react-navigation/native';
 import prompts from './prompts_clean.json'; // Ajusta la ruta a tu archivo JSON
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import * as Speech from 'expo-speech';
 
 const WarningDialog = ({ visible, onClose }) => {
   return (
@@ -84,13 +85,19 @@ const PacienteConsulta = () => {
         console.log('Matched Prompt:', matchedPrompt);
 
         if (matchedPrompt) {
-          setResponseText(matchedPrompt.output);
+          const output = matchedPrompt.output;
+          setResponseText(output);
+          Speech.speak(output);
         } else {
-          setResponseText(aiResponse + ' - Saipe');
+          const output = aiResponse + ' - Saipe';
+          setResponseText(output);
+          Speech.speak(output);
         }
       } catch (error) {
         console.error('Error al generar contenido:', error);
-        setResponseText('Hubo un error al procesar su solicitud. Inténtelo nuevamente más tarde. - Saipe');
+        const errorMessage = 'Hubo un error al procesar su solicitud. Inténtelo nuevamente más tarde. - Saipe';
+        setResponseText(errorMessage);
+        Speech.speak(errorMessage);
       }
     }
   };
