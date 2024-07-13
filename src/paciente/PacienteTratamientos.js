@@ -16,7 +16,7 @@ const PacienteTratamientos = () => {
     try {
       const token = await SecureStore.getItemAsync('token');
       if (token) {
-        const data = await getPacienteInfo();
+        const data = await getPacienteInfo(token);
         setUserInfo(data);
       }
     } catch (error) {
@@ -53,8 +53,8 @@ const PacienteTratamientos = () => {
     return numero ? parseInt(numero[0]) : null;
   };
 
-  const configurarAlarma = (intervaloEnHoras) => {
-    const intervaloEnMilisegundos = intervaloEnHoras * 60 * 60 * 1000; // Convertir horas a milisegundos
+  const configurarAlarma = (intervaloEnMinutos) => {
+    const intervaloEnMilisegundos = intervaloEnMinutos * 60 * 1000; // Convertir minutos a milisegundos
     const intervalId = setInterval(async () => {
       for (let i = 0; i < 5; i++) { // Vibrar 5 veces
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);

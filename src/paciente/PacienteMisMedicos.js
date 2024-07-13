@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, RefreshControl } from 'react-native';
 import { getPacienteInfo, getMedicoByPacienteId } from '../api'; // Import the function to get assigned doctors
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ListaMedicos from '../../img/ListaMedicos.png'; // Ensure you have this image in the correct folder
@@ -7,42 +7,56 @@ import ListaMedicos from '../../img/ListaMedicos.png'; // Ensure you have this i
 const PacienteMisMedicos = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [medico, setMedico] = useState(null);
+    const [refreshing, setRefreshing] = useState(false);
 
-    useEffect(() => {
-        const fetchUserInfo = async () => {
+    const fetchUserInfo = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const data = await getPacienteInfo(token);
+            setUserInfo(data);
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+        }
+    };
+
+    const fetchMedicos = async () => {
+        if (userInfo) {
             try {
                 const token = await AsyncStorage.getItem('token');
-                const data = await getPacienteInfo(token);
-                setUserInfo(data);
+                const medicoData = await getMedicoByPacienteId(userInfo.id, token);
+                setMedico(medicoData);
             } catch (error) {
-                console.error('Error fetching user info:', error);
+                console.error('The list of assigned doctors could not be retrieved.', error);
             }
-        };
+        }
+    };
+
+    useEffect(() => {
         fetchUserInfo();
     }, []);
 
     useEffect(() => {
-        if (userInfo) {
-            const fetchMedicos = async () => {
-                try {
-                    const token = await AsyncStorage.getItem('token');
-                    const medicoData = await getMedicoByPacienteId(userInfo.id, token);
-                    setMedico(medicoData);
-                } catch (error) {
-                    console.error('The list of assigned doctors could not be retrieved.', error);
-                }
-            };
-
-            fetchMedicos();
-        }
+        fetchMedicos();
     }, [userInfo]);
 
     const handleEmergencyCall = (phoneNumber) => {
         Linking.openURL(`tel:${phoneNumber}`);
     };
 
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await fetchUserInfo();
+        await fetchMedicos();
+        setRefreshing(false);
+    };
+
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView 
+            style={styles.container}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+        >
             <View style={styles.header}>
                 <Text style={styles.headerText}>Mis Médicos</Text>
             </View>
