@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert, RefreshControl } from 'react-native';
 import { getPacienteInfo, getTratamientos } from '../api'; // Asegúrate de que la ruta sea correcta
 import * as SecureStore from 'expo-secure-store';
 import * as Haptics from 'expo-haptics';
@@ -10,6 +10,7 @@ const PacienteTratamientos = () => {
   const [tratamientos, setTratamientos] = useState([]);
   const [numeros, setNumeros] = useState([]);
   const [sound, setSound] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
   const intervalRefs = useRef([]);
 
   const fetchUserInfo = async () => {
@@ -118,8 +119,20 @@ const PacienteTratamientos = () => {
       : undefined;
   }, [sound]);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchUserInfo();
+    await fetchTratamientos();
+    setRefreshing(false);
+  };
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.header}>
         <Text style={styles.headerText}>Tratamientos</Text>
       </View>

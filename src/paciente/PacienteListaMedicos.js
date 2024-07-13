@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView, RefreshControl } from 'react-native';
 import { getMedicos, patchMedicoByPacienteId } from '../api'; // Import the function to get doctors and assign doctor to patient
 import * as SecureStore from 'expo-secure-store';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const PacienteListaMedicos = () => {
     const [medicos, setMedicos] = useState([]);
     const [page, setPage] = useState(1);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         const fetchMedicos = async () => {
@@ -37,8 +38,26 @@ const PacienteListaMedicos = () => {
         }
     };
 
+    const onRefresh = async () => {
+        setRefreshing(true);
+        try {
+            const token = await SecureStore.getItemAsync('token');
+            const medicosData = await getMedicos(token, 1);
+            setMedicos(medicosData);
+            setPage(1);
+        } catch (error) {
+            console.error('The list of doctors could not be retrieved.', error);
+        }
+        setRefreshing(false);
+    };
+
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView 
+            contentContainerStyle={styles.container}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+        >
             <View style={styles.header}>
                 <Text style={styles.headerText}>Lista de Médicos</Text>
             </View>
@@ -48,22 +67,20 @@ const PacienteListaMedicos = () => {
                         <View key={`${medico.id}-${index}`} style={styles.medicoCard}>
                             <Image source={require('../../img/ListaMedicos.png')} style={styles.medicoImage} />
                             <View style={styles.medicoInfo}>
-                                <View>
+                                <View style={styles.medicoTextContainer}>
                                     <Text style={styles.medicoName}>{medico.nombre} {medico.apellido}</Text>
-                                    <Text style={styles.medicoDetail}>{medico.edad} años - {medico.especialidad}</Text>
+                                    <Text style={styles.medicoDetail}>
+                                        <Icon name="local-hospital" size={16} color="#666" /> {medico.especialidad}
+                                    </Text>
+                                    <Text style={styles.medicoDetail}>
+                                        <Icon name="phone" size={16} color="#666" /> {medico.telefono}
+                                    </Text>
+                                    <Text style={styles.medicoDetail}>{medico.edad} años</Text>
                                 </View>
-                                <View style={styles.sessionInfo}>
-                                    <Text style={styles.sessionText}>3:00 PM - 60 min</Text>
-                                    <Text style={styles.sessionText}>Session 11/13</Text>
-                                </View>
-                            </View>
-                            <View style={styles.locationInfo}>
-                                <Icon name="location-on" size={20} color="#1D8348" />
-                                <Text style={styles.locationText}>{medico.direccion}</Text>
                             </View>
                             <View style={styles.buttonsContainer}>
                                 <TouchableOpacity style={styles.addButton} onPress={() => handleAddMedico(medico.id)}>
-                                    <Text style={styles.buttonText}>+</Text>
+                                    <Text style={styles.buttonText}>Asignar</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.routeButton}>
                                     <Text style={styles.buttonText}>Ver Ruta</Text>
@@ -121,11 +138,16 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 25,
         marginBottom: 10,
+        alignSelf: 'center',
     },
     medicoInfo: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 10,
+    },
+    medicoTextContainer: {
+        flex: 1,
+        marginLeft: 10,
     },
     medicoName: {
         fontSize: 18,
@@ -134,25 +156,12 @@ const styles = StyleSheet.create({
     },
     medicoDetail: {
         color: '#666',
-    },
-    sessionInfo: {
-        alignItems: 'flex-end',
-    },
-    sessionText: {
-        color: '#666',
-    },
-    locationInfo: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    locationText: {
-        marginLeft: 5,
-        color: '#1D8348',
+        marginTop: 5,
     },
     buttonsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginTop: 10,
     },
     addButton: {
         backgroundColor: '#1D8348',

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert, Linking, RefreshControl } from 'react-native';
 import { getPacienteInfo, getHistorial } from '../api'; // Asegúrate de que la ruta sea correcta
 import * as SecureStore from 'expo-secure-store';
 import { format } from 'date-fns';
@@ -8,6 +8,7 @@ import { es } from 'date-fns/locale';
 const PacienteHistorial = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [historial, setHistorial] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchUserInfo = async () => {
     try {
@@ -45,8 +46,25 @@ const PacienteHistorial = () => {
     }
   }, [userInfo]);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchUserInfo();
+    await fetchHistorial();
+    setRefreshing(false);
+  };
+
+  const openGoogleMaps = () => {
+    const url = 'https://maps.app.goo.gl/Nowiq9MDY7Mk2k23A?g_st=iw';
+    Linking.openURL(url).catch(err => console.error('Error opening Google Maps', err));
+  };
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.header}>
         <Text style={styles.headerText}>Historial Médico</Text>
       </View>
@@ -58,6 +76,9 @@ const PacienteHistorial = () => {
               <View style={styles.historialDetails}>
                 <Text style={styles.historialDate}>Fecha: {format(new Date(historialM.fecha), 'dd MMMM, yyyy h:mm a', { locale: es })}</Text>
                 <Text style={styles.historialDescription}><Text style={styles.bold}>Descripción:</Text> {historialM.descripcion}</Text>
+                <TouchableOpacity style={styles.hospitalButton} onPress={openGoogleMaps}>
+                  <Text style={styles.hospitalButtonText}>Hospital</Text>
+                </TouchableOpacity>
               </View>
             </View>
           ))
@@ -76,8 +97,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-},
-header: {
+  },
+  header: {
     backgroundColor: '#1D8348',
     paddingVertical: 10,
     paddingHorizontal: 10,
@@ -85,16 +106,16 @@ header: {
     borderBottomRightRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-},
-headerText: {
+  },
+  headerText: {
     fontSize: 24,
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
-},
-content: {
+  },
+  content: {
     padding: 20,
-},
+  },
   historialItem: {
     flexDirection: 'row',
     backgroundColor: '#1D8348',
@@ -142,6 +163,19 @@ content: {
   loadMoreButtonText: {
     color: 'white',
     fontSize: 18,
+    fontWeight: 'bold',
+  },
+  hospitalButton: {
+    backgroundColor: '#2196F3',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  hospitalButtonText: {
+    color: 'white',
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });
