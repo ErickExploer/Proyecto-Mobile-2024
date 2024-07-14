@@ -1,13 +1,15 @@
+// PacienteMisMedicos.js
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, RefreshControl } from 'react-native';
-import { getPacienteInfo, getMedicoByPacienteId } from '../api'; // Import the function to get assigned doctors
+import { getPacienteInfo } from '../api'; // Importar la función para obtener la información del paciente
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ListaMedicos from '../../img/ListaMedicos.png'; // Ensure you have this image in the correct folder
+import ListaMedicos from '../../img/ListaMedicos.png'; // Asegúrate de tener esta imagen en la carpeta correcta
+import { useMedico } from './MedicoContext'; // Importar el contexto
 
 const PacienteMisMedicos = () => {
     const [userInfo, setUserInfo] = useState(null);
-    const [medico, setMedico] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
+    const { medicoSeleccionado } = useMedico(); // Usar el contexto
 
     const fetchUserInfo = async () => {
         try {
@@ -15,29 +17,13 @@ const PacienteMisMedicos = () => {
             const data = await getPacienteInfo(token);
             setUserInfo(data);
         } catch (error) {
-            console.error('Error fetching user info:', error);
-        }
-    };
-
-    const fetchMedicos = async () => {
-        if (userInfo) {
-            try {
-                const token = await AsyncStorage.getItem('token');
-                const medicoData = await getMedicoByPacienteId(userInfo.id, token);
-                setMedico(medicoData);
-            } catch (error) {
-                console.error('The list of assigned doctors could not be retrieved.', error);
-            }
+            console.error('Error al obtener la información del usuario:', error);
         }
     };
 
     useEffect(() => {
         fetchUserInfo();
     }, []);
-
-    useEffect(() => {
-        fetchMedicos();
-    }, [userInfo]);
 
     const handleEmergencyCall = (phoneNumber) => {
         Linking.openURL(`tel:${phoneNumber}`);
@@ -46,7 +32,6 @@ const PacienteMisMedicos = () => {
     const onRefresh = async () => {
         setRefreshing(true);
         await fetchUserInfo();
-        await fetchMedicos();
         setRefreshing(false);
     };
 
@@ -61,22 +46,22 @@ const PacienteMisMedicos = () => {
                 <Text style={styles.headerText}>Mis Médicos</Text>
             </View>
             <View style={styles.content}>
-                {medico ? (
-                    <View key={medico.id} style={styles.medicoCard}>
+                {medicoSeleccionado ? (
+                    <View key={medicoSeleccionado.id} style={styles.medicoCard}>
                         <View style={styles.cardHeader}>
                             <Image source={ListaMedicos} style={styles.medicoImage} />
-                            <Text style={styles.medicoName}>Dr. {medico.nombre} {medico.apellido}</Text>
+                            <Text style={styles.medicoName}>Dr. {medicoSeleccionado.nombre} {medicoSeleccionado.apellido}</Text>
                         </View>
-                        <Text style={styles.specialtyText}>{medico.especialidad}</Text>
-                        <Text style={styles.infoText}>Email: {medico.email}</Text>
-                        <Text style={styles.infoText}>Teléfono: {medico.telefono}</Text>
-                        <Text style={styles.infoText}>Edad: {medico.edad} años</Text>
+                        <Text style={styles.specialtyText}>{medicoSeleccionado.especialidad}</Text>
+                        <Text style={styles.infoText}>Email: {medicoSeleccionado.email}</Text>
+                        <Text style={styles.infoText}>Teléfono: {medicoSeleccionado.telefono}</Text>
+                        <Text style={styles.infoText}>Edad: {medicoSeleccionado.edad} años</Text>
                         <TouchableOpacity style={styles.button}>
                             <Text style={styles.buttonText}>Ver Ruta</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                             style={styles.emergencyButton} 
-                            onPress={() => handleEmergencyCall(medico.telefono)}>
+                            onPress={() => handleEmergencyCall(medicoSeleccionado.telefono)}>
                             <Text style={styles.emergencyButtonText}>Llamada de Emergencia</Text>
                         </TouchableOpacity>
                     </View>

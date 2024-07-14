@@ -1,9 +1,10 @@
+// App.js
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import SplashScreen from './src/SplashScreen'; // Importa la pantalla de inicio
+import SplashScreen from './src/SplashScreen'; 
 import Login from './src/Login';
 import Register from './src/Register';
 import Paciente from './src/paciente/Paciente';
@@ -20,6 +21,7 @@ import MedicoHistorialEdit from './src/medico/MedicoHistorialEdit';
 import MedicoTratamientos from './src/medico/MedicoTratamientos';
 import MedicoTratamientosEdit from './src/medico/MedicoTratamientosEdit';
 import * as SecureStore from 'expo-secure-store';
+import { MedicoProvider } from './src/paciente/MedicoContext'; // Importa el proveedor del contexto
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -60,18 +62,17 @@ const PacienteStack = ({ setIsLoggedIn }) => (
       name="PacienteHistorial" 
       component={PacienteHistorial}
       options={{ headerShown: false }}
-    /><Stack.Screen 
-    name="PacienteTratamientos" 
-    component={PacienteTratamientos}
-    options={{ headerShown: false }}
-  />
-
-  <Stack.Screen 
-    name="PacienteMisMedicos" 
-    component={PacienteMisMedicos}
-    options={{ headerShown: false }}
-  />
-
+    />
+    <Stack.Screen 
+      name="PacienteTratamientos" 
+      component={PacienteTratamientos}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen 
+      name="PacienteMisMedicos" 
+      component={PacienteMisMedicos}
+      options={{ headerShown: false }}
+    />
   </Stack.Navigator>
 );
 
@@ -85,8 +86,8 @@ const MedicoStack = ({ setIsLoggedIn }) => (
     </Stack.Screen>
     <Stack.Screen name="MedicoEdit" component={MedicoEdit} options={{ headerShown: false }} />
     <Stack.Screen name="MedicoHistorial" component={MedicoHistorial}  options={{ headerShown: false }}/>
-    <Stack.Screen name="MedicoHistorialEdit" component={MedicoHistorialEdit}options={{ headerShown: false }} />
-    <Stack.Screen name="MedicoTratamientos" component={MedicoTratamientos}options={{ headerShown: false }} />
+    <Stack.Screen name="MedicoHistorialEdit" component={MedicoHistorialEdit} options={{ headerShown: false }} />
+    <Stack.Screen name="MedicoTratamientos" component={MedicoTratamientos} options={{ headerShown: false }} />
     <Stack.Screen name="MedicoTratamientosEdit" component={MedicoTratamientosEdit} options={{ headerShown: false }}/>
   </Stack.Navigator>
 );
@@ -223,24 +224,26 @@ const App = () => {
   };
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash">
-        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="App" options={{ headerShown: false }}>
-          {() => (
-            isLoggedIn ? (
-              role === 'ROLE_PACIENTE' ? (
-                <PacienteTabNavigator setIsLoggedIn={setIsLoggedIn} />
+    <MedicoProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Splash">
+          <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="App" options={{ headerShown: false }}>
+            {() => (
+              isLoggedIn ? (
+                role === 'ROLE_PACIENTE' ? (
+                  <PacienteTabNavigator setIsLoggedIn={setIsLoggedIn} />
+                ) : (
+                  <MedicoTabNavigator setIsLoggedIn={setIsLoggedIn} />
+                )
               ) : (
-                <MedicoTabNavigator setIsLoggedIn={setIsLoggedIn} />
+                <AuthStack setIsLoggedIn={(status, userRole) => { setIsLoggedIn(status); setRole(userRole); }} />
               )
-            ) : (
-              <AuthStack setIsLoggedIn={(status, userRole) => { setIsLoggedIn(status); setRole(userRole); }} />
-            )
-          )}
-        </Stack.Screen>
-      </Stack.Navigator>
-    </NavigationContainer>
+            )}
+          </Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </MedicoProvider>
   );
 };
 

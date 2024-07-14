@@ -1,13 +1,16 @@
+// PacienteListaMedicos.js
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView, RefreshControl } from 'react-native';
-import { getMedicos, patchMedicoByPacienteId } from '../api'; // Import the function to get doctors and assign doctor to patient
+import { getMedicos, patchMedicoByPacienteId } from '../api';
 import * as SecureStore from 'expo-secure-store';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useMedico } from './MedicoContext'; // Importar el contexto
 
 const PacienteListaMedicos = () => {
     const [medicos, setMedicos] = useState([]);
     const [page, setPage] = useState(1);
     const [refreshing, setRefreshing] = useState(false);
+    const { setMedicoSeleccionado } = useMedico(); // Usar el contexto
 
     useEffect(() => {
         const fetchMedicos = async () => {
@@ -16,7 +19,7 @@ const PacienteListaMedicos = () => {
                 const medicosData = await getMedicos(token, page);
                 setMedicos((prevMedicos) => [...prevMedicos, ...medicosData]);
             } catch (error) {
-                console.error('The list of doctors could not be retrieved.', error);
+                console.error('No se pudo recuperar la lista de médicos.', error);
             }
         };
 
@@ -27,13 +30,14 @@ const PacienteListaMedicos = () => {
         setPage((prevPage) => prevPage + 1);
     };
 
-    const handleAddMedico = async (medicoId) => {
+    const handleAddMedico = async (medicoId, medico) => {
         try {
             const token = await SecureStore.getItemAsync('token');
             await patchMedicoByPacienteId(medicoId, token);
-            Alert.alert('Success', 'El médico ha sido asignado exitosamente al paciente.');
+            setMedicoSeleccionado(medico); // Actualizar el médico seleccionado
+            Alert.alert('Éxito', 'El médico ha sido asignado exitosamente al paciente.');
         } catch (error) {
-            console.error('A doctor could not be assigned to the patient.', error);
+            console.error('No se pudo asignar el médico al paciente.', error);
             Alert.alert('Error', 'No se pudo asignar el médico al paciente.');
         }
     };
@@ -46,7 +50,7 @@ const PacienteListaMedicos = () => {
             setMedicos(medicosData);
             setPage(1);
         } catch (error) {
-            console.error('The list of doctors could not be retrieved.', error);
+            console.error('No se pudo recuperar la lista de médicos.', error);
         }
         setRefreshing(false);
     };
@@ -79,8 +83,8 @@ const PacienteListaMedicos = () => {
                                 </View>
                             </View>
                             <View style={styles.buttonsContainer}>
-                                <TouchableOpacity style={styles.addButton} onPress={() => handleAddMedico(medico.id)}>
-                                    <Text style={styles.buttonText}>Asignar</Text>
+                                <TouchableOpacity style={styles.addButton} onPress={() => handleAddMedico(medico.id, medico)}>
+                                    <Text style={styles.buttonText}>Escoger</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.routeButton}>
                                     <Text style={styles.buttonText}>Ver Ruta</Text>
