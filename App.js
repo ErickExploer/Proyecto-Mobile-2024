@@ -14,12 +14,14 @@ import PacienteHistorial from './src/paciente/PacienteHistorial';
 import PacienteTratamientos from './src/paciente/PacienteTratamientos';
 import PacienteMisMedicos from './src/paciente/PacienteMisMedicos';
 import PacienteListaMedicos from './src/paciente/PacienteListaMedicos';
+import PacienteUbicacion from './src/paciente/PacienteUbicacion';
 import Medico from './src/medico/Medico';
 import MedicoEdit from './src/medico/MedicoEdit';
 import MedicoHistorial from './src/medico/MedicoHistorial';
 import MedicoHistorialEdit from './src/medico/MedicoHistorialEdit';
 import MedicoTratamientos from './src/medico/MedicoTratamientos';
 import MedicoTratamientosEdit from './src/medico/MedicoTratamientosEdit';
+import MedicoRuta from './src/medico/MedicoRuta';
 import * as SecureStore from 'expo-secure-store';
 import { MedicoProvider } from './src/paciente/MedicoContext'; // Importa el proveedor del contexto
 
@@ -73,6 +75,11 @@ const PacienteStack = ({ setIsLoggedIn }) => (
       component={PacienteMisMedicos}
       options={{ headerShown: false }}
     />
+    <Stack.Screen 
+      name="Ubicación" 
+      component={PacienteUbicacion}
+      options={{ headerShown: false }}
+    />
   </Stack.Navigator>
 );
 
@@ -89,6 +96,7 @@ const MedicoStack = ({ setIsLoggedIn }) => (
     <Stack.Screen name="MedicoHistorialEdit" component={MedicoHistorialEdit} options={{ headerShown: false }} />
     <Stack.Screen name="MedicoTratamientos" component={MedicoTratamientos} options={{ headerShown: false }} />
     <Stack.Screen name="MedicoTratamientosEdit" component={MedicoTratamientosEdit} options={{ headerShown: false }}/>
+    <Stack.Screen name="MedicoRuta" component={MedicoRuta} options={{ headerShown: false }}/>
   </Stack.Navigator>
 );
 
@@ -113,6 +121,9 @@ const PacienteTabNavigator = ({ setIsLoggedIn }) => (
             break;
           case 'Lista de Médicos':
             iconName = 'list';
+            break;
+          case 'Ubicación':
+            iconName = 'map';
             break;
           default:
             iconName = 'circle';
@@ -141,6 +152,7 @@ const PacienteTabNavigator = ({ setIsLoggedIn }) => (
     <Tab.Screen name="Tratamientos" component={PacienteTratamientos} />
     <Tab.Screen name="Mis Médicos" component={PacienteMisMedicos} />
     <Tab.Screen name="Lista de Médicos" component={PacienteListaMedicos} />
+    <Tab.Screen name="Ubicación" component={PacienteUbicacion} />
   </Tab.Navigator>
 );
 
@@ -159,6 +171,9 @@ const MedicoTabNavigator = ({ setIsLoggedIn }) => (
             break;
           case 'Tratamientos':
             iconName = 'healing';
+            break;
+          case 'Ruta':
+            iconName = 'map';
             break;
           default:
             iconName = 'circle';
@@ -185,6 +200,7 @@ const MedicoTabNavigator = ({ setIsLoggedIn }) => (
     </Tab.Screen>
     <Tab.Screen name="Historial" component={MedicoHistorial} />
     <Tab.Screen name="Tratamientos" component={MedicoTratamientos} />
+    <Tab.Screen name="Ruta" component={MedicoRuta} />
   </Tab.Navigator>
 );
 

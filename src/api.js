@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
 
-const API_BASE_URL = 'http://3.88.42.24:8080';
+const API_BASE_URL = 'http://3.87.229.25:8080';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -52,6 +52,16 @@ export const getPacienteInfo = async (token) => {
      
     }
   };
+
+  // Obtener información del paciente
+export const getPacienteUbicacion = async (id) => {
+  await setAuthToken();
+  try {
+    const response = await api.get(`/paciente/ubicacion/${id}`);
+    return response.data;
+  } catch (error) {
+  }
+};
   
   // Obtener información del médico
   export const getMedicoInfo = async (token) => {
@@ -288,6 +298,19 @@ export const getPacientesByMedico = async (id) => {
     return response.data;
   } catch (error) {
     console.error('Failed to fetch pacientes by medico:', error);
+    throw error;
+  }
+};
+
+
+// Actualizar o Crear Ubicacion
+export const updateOrCreateUbicacion = async (ubicacion) => {
+  await setAuthToken();
+  try {
+    const response = await api.patch(`/paciente/ubicacion`, ubicacion);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create or update Ubicacion:', error);
     throw error;
   }
 };

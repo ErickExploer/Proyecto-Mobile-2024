@@ -24,6 +24,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "com.google.android.geo.API_KEY":  "AIzaSyAA2R28_1hTrks8JY7wAoytXmrzGnltgRQ",
       "permissions": [
         "CAMERA",
         "RECORD_AUDIO",
@@ -34,8 +35,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-secure-store"
-    ]
+    "plugins": ["expo-secure-store", "expo-location"]
   }
 }
