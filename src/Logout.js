@@ -14,7 +14,7 @@ const Logout = ({ setIsLoggedIn }) => {
 
   return (
     <View style={styles.container}>
-      <Text>Bienvenido a SalPÉ</Text>
+      <Text>Bienvenido a SAÍPE</Text>
       <Button title="Logout" onPress={handleLogout} />
     </View>
   );

@@ -1,4 +1,3 @@
-// PacienteListaMedicos.js
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView, RefreshControl } from 'react-native';
 import { getMedicos, patchMedicoByPacienteId } from '../api';
@@ -6,28 +5,49 @@ import * as SecureStore from 'expo-secure-store';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useMedico } from './MedicoContext'; // Importar el contexto
 
+const ITEMS_PER_PAGE = 10; // Definimos cuántos médicos mostrar por página
+
 const PacienteListaMedicos = () => {
-    const [medicos, setMedicos] = useState([]);
+    const [allMedicos, setAllMedicos] = useState([]);
+    const [displayedMedicos, setDisplayedMedicos] = useState([]);
     const [page, setPage] = useState(1);
     const [refreshing, setRefreshing] = useState(false);
     const { setMedicoSeleccionado } = useMedico(); // Usar el contexto
 
     useEffect(() => {
-        const fetchMedicos = async () => {
-            try {
-                const token = await SecureStore.getItemAsync('token');
-                const medicosData = await getMedicos(token, page);
-                setMedicos((prevMedicos) => [...prevMedicos, ...medicosData]);
-            } catch (error) {
-                console.error('No se pudo recuperar la lista de médicos.', error);
-            }
-        };
-
         fetchMedicos();
-    }, [page]);
+    }, []);
+
+    useEffect(() => {
+        if (allMedicos.length > 0) {
+            // Cargar la primera página al cargar los médicos
+            const initialMedicos = allMedicos.slice(0, ITEMS_PER_PAGE);
+            setDisplayedMedicos(initialMedicos);
+            setPage(2); // Configurar la siguiente página
+        }
+    }, [allMedicos]);
+
+    const fetchMedicos = async () => {
+        try {
+            const token = await SecureStore.getItemAsync('token');
+            const medicosData = await getMedicos();
+            setAllMedicos(medicosData);
+        } catch (error) {
+            console.error('No se pudo recuperar la lista de médicos.', error);
+        }
+    };
 
     const loadMore = () => {
-        setPage((prevPage) => prevPage + 1);
+        const startIndex = (page - 1) * ITEMS_PER_PAGE;
+        const endIndex = page * ITEMS_PER_PAGE;
+        const newMedicos = allMedicos.slice(startIndex, endIndex);
+        if (newMedicos.length > 0) {
+            setDisplayedMedicos((prevDisplayedMedicos) => [
+                ...prevDisplayedMedicos,
+                ...newMedicos,
+            ]);
+            setPage((prevPage) => prevPage + 1);
+        }
     };
 
     const handleAddMedico = async (medicoId, medico) => {
@@ -44,14 +64,10 @@ const PacienteListaMedicos = () => {
 
     const onRefresh = async () => {
         setRefreshing(true);
-        try {
-            const token = await SecureStore.getItemAsync('token');
-            const medicosData = await getMedicos(token, 1);
-            setMedicos(medicosData);
-            setPage(1);
-        } catch (error) {
-            console.error('No se pudo recuperar la lista de médicos.', error);
-        }
+        await fetchMedicos();
+        const initialMedicos = allMedicos.slice(0, ITEMS_PER_PAGE);
+        setDisplayedMedicos(initialMedicos);
+        setPage(2); // Configurar la siguiente página
         setRefreshing(false);
     };
 
@@ -66,8 +82,8 @@ const PacienteListaMedicos = () => {
                 <Text style={styles.headerText}>Lista de Médicos</Text>
             </View>
             <View style={styles.content}>
-                {medicos.length > 0 ? (
-                    medicos.map((medico, index) => (
+                {displayedMedicos.length > 0 ? (
+                    displayedMedicos.map((medico, index) => (
                         <View key={`${medico.id}-${index}`} style={styles.medicoCard}>
                             <Image source={require('../../img/ListaMedicos.png')} style={styles.medicoImage} />
                             <View style={styles.medicoInfo}>

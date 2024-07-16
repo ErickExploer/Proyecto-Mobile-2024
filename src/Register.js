@@ -51,7 +51,7 @@ const Register = ({ navigation }) => {
       enableOnAndroid={true}
     >
       <View style={styles.innerContainer}>
-        <Text style={styles.title}>Bienvenido a SalPÉ</Text>
+        <Text style={styles.title}>Bienvenido a SAÍPE</Text>
         <Image source={require('../img/Logo_ODAD.png')} style={styles.logo} />
         <Text style={styles.label}>Nombre:</Text>
         <TextInput
@@ -137,10 +137,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
     color: 'white',
+    fontWeight: 'bold',
   },
   logo: {
     width: 100,
-    height: 100,
+    height: 120,
     marginBottom: 20,
   },
   label: {

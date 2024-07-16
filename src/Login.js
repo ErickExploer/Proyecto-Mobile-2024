@@ -57,7 +57,7 @@ const Login = ({ navigation, setIsLoggedIn }) => {
       style={styles.container}
     >
       <View style={styles.innerContainer}>
-        <Text style={styles.title}>Bienvenido a SalPÉ</Text>
+        <Text style={styles.title}>Bienvenido a SAÍPE</Text>
         <Image source={require('../img/Logo_ODAD.png')} style={styles.logo} />
         <Text style={styles.label}>Correo:</Text>
         <TextInput
@@ -93,7 +93,7 @@ const Login = ({ navigation, setIsLoggedIn }) => {
         </TouchableOpacity>
         <Text style={styles.or}>O</Text>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.buttonText}>Registro</Text>
+          <Text style={styles.buttonText}>Registrarse</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -115,10 +115,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
     color: 'white',
+    fontWeight: 'bold',
   },
   logo: {
     width: 100,
-    height: 100,
+    height: 120,
     marginBottom: 20,
   },
   label: {

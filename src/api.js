@@ -152,7 +152,7 @@ export const patchMedicoByPacienteId = async (medicoId) => {
 export const createRuta = async (rutaData) => {
   await setAuthToken();
   try {
-    const response = await api.post('/rutas', rutaData);
+    const response = await api.post('/ruta', rutaData);
     return response.data;
   } catch (error) {
     console.error('Error creating route:', error);
