@@ -23,9 +23,8 @@ import MedicoTratamientosEdit from './src/medico/MedicoTratamientosEdit';
 import MedicoMisPacientes from './src/medico/MedicoMisPacientes';
 import MedicoMiRuta from './src/medico/MedicoMiRuta';
 import * as SecureStore from 'expo-secure-store';
-import { MedicoProvider } from './src/paciente/MedicoContext'; // Importa el proveedor del contexto
 import { StripeProvider } from '@stripe/stripe-react-native';
-import PaymentScreen from './PaymentScreen'; // Tu pantalla de pagos
+import PaymentScreen from './src/PaymentScreen'; // Tu pantalla de pagos
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -216,7 +215,6 @@ const App = () => {
 
   return (
     <StripeProvider publishableKey="pk_test_51PcwLI2LVVGJQHnTQpHNSP1egvAmIEidhBsYKnrWQFkppgO46qtHIC4BT7Af7ByNGsNPufLRIsK94crOjZ3jlM03004TkT9QhE">
-      <MedicoProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Splash">
             <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
@@ -235,7 +233,6 @@ const App = () => {
             </Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>
-      </MedicoProvider>
     </StripeProvider>
   );
 };

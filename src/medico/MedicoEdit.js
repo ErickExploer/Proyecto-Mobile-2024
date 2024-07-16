@@ -11,6 +11,7 @@ const MedicoEdit = () => {
     especialidad: '',
     telefono: '',
     edad: '',
+    precio: '',
   });
   const navigation = useNavigation();
 
@@ -116,6 +117,12 @@ const MedicoEdit = () => {
           placeholder="Edad"
           value={userInfo.edad}
           onChangeText={(value) => handleInputChange('edad', value)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Precio"
+          value={userInfo.precio}
+          onChangeText={(value) => handleInputChange('precio', value)}
         />
       </View>
       <TouchableOpacity style={styles.saveButton} onPress={handleUpdate}>

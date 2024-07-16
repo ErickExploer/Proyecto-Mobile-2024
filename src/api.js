@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
 
-const API_BASE_URL = 'http://3.88.42.24:8080';
+const API_BASE_URL = 'http://52.0.117.206:8080';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

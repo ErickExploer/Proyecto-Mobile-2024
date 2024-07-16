@@ -1,28 +1,29 @@
 // PacienteMisMedicos.js
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Linking, RefreshControl } from 'react-native';
-import { getPacienteInfo } from '../api'; // Importar la función para obtener la información del paciente
+import { getPacienteInfo, getMedicoByPacienteId } from '../api'; // Importar las funciones necesarias
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ListaMedicos from '../../img/ListaMedicos.png'; // Asegúrate de tener esta imagen en la carpeta correcta
-import { useMedico } from './MedicoContext'; // Importar el contexto
 
 const PacienteMisMedicos = () => {
-    const [userInfo, setUserInfo] = useState(null);
+    const [pacienteInfo, setPacienteInfo] = useState(null);
+    const [medicos, setMedicos] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
-    const { medicoSeleccionado } = useMedico(); // Usar el contexto
 
-    const fetchUserInfo = async () => {
+    const fetchPacienteInfo = async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const data = await getPacienteInfo(token);
-            setUserInfo(data);
+            const pacienteData = await getPacienteInfo(token);
+            setPacienteInfo(pacienteData);
+            const medicosData = await getMedicoByPacienteId(pacienteData.id, token);
+            setMedicos(medicosData);
         } catch (error) {
-            console.error('Error al obtener la información del usuario:', error);
+            console.error('Error al obtener la información del paciente:', error);
         }
     };
 
     useEffect(() => {
-        fetchUserInfo();
+        fetchPacienteInfo();
     }, []);
 
     const handleEmergencyCall = (phoneNumber) => {
@@ -31,7 +32,7 @@ const PacienteMisMedicos = () => {
 
     const onRefresh = async () => {
         setRefreshing(true);
-        await fetchUserInfo();
+        await fetchPacienteInfo();
         setRefreshing(false);
     };
 
@@ -46,25 +47,27 @@ const PacienteMisMedicos = () => {
                 <Text style={styles.headerText}>Mis Médicos</Text>
             </View>
             <View style={styles.content}>
-                {medicoSeleccionado ? (
-                    <View key={medicoSeleccionado.id} style={styles.medicoCard}>
-                        <View style={styles.cardHeader}>
-                            <Image source={ListaMedicos} style={styles.medicoImage} />
-                            <Text style={styles.medicoName}>Dr. {medicoSeleccionado.nombre} {medicoSeleccionado.apellido}</Text>
+                {medicos.length > 0 ? (
+                    medicos.map((medico) => (
+                        <View key={medico.id} style={styles.medicoCard}>
+                            <View style={styles.cardHeader}>
+                                <Image source={ListaMedicos} style={styles.medicoImage} />
+                                <Text style={styles.medicoName}>Dr. {medico.nombre} {medico.apellido}</Text>
+                            </View>
+                            <Text style={styles.specialtyText}>{medico.especialidad}</Text>
+                            <Text style={styles.infoText}>Email: {medico.email}</Text>
+                            <Text style={styles.infoText}>Teléfono: {medico.telefono}</Text>
+                            <Text style={styles.infoText}>Edad: {medico.edad} años</Text>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.buttonText}>Ver Ruta</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={styles.emergencyButton} 
+                                onPress={() => handleEmergencyCall(medico.telefono)}>
+                                <Text style={styles.emergencyButtonText}>Llamada de Emergencia</Text>
+                            </TouchableOpacity>
                         </View>
-                        <Text style={styles.specialtyText}>{medicoSeleccionado.especialidad}</Text>
-                        <Text style={styles.infoText}>Email: {medicoSeleccionado.email}</Text>
-                        <Text style={styles.infoText}>Teléfono: {medicoSeleccionado.telefono}</Text>
-                        <Text style={styles.infoText}>Edad: {medicoSeleccionado.edad} años</Text>
-                        <TouchableOpacity style={styles.button}>
-                            <Text style={styles.buttonText}>Ver Ruta</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={styles.emergencyButton} 
-                            onPress={() => handleEmergencyCall(medicoSeleccionado.telefono)}>
-                            <Text style={styles.emergencyButtonText}>Llamada de Emergencia</Text>
-                        </TouchableOpacity>
-                    </View>
+                    ))
                 ) : (
                     <Text style={styles.noMedicoText}>No hay médicos asignados.</Text>
                 )}

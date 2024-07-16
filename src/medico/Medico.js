@@ -91,6 +91,7 @@ const Medico = ({ setIsLoggedIn }) => {
             <Text style={styles.info}>Teléfono: {userInfo?.telefono}</Text>
             <Text style={styles.info}>Edad: {userInfo?.edad}</Text>
             <Text style={styles.info}>Especialidad: {userInfo?.especialidad}</Text>
+            <Text style={styles.info}>Precio: {userInfo?.precio}</Text>
             <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
               <Text style={styles.editButtonText}>Editar</Text>
             </TouchableOpacity>

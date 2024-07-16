@@ -1,18 +1,19 @@
+// PacienteListaMedicos.js
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView, RefreshControl } from 'react-native';
-import { getMedicos, patchMedicoByPacienteId } from '../api';
+import { getMedicos } from '../api';
 import * as SecureStore from 'expo-secure-store';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useMedico } from './MedicoContext'; // Importar el contexto
+import { useNavigation } from '@react-navigation/native';
 
-const ITEMS_PER_PAGE = 10; // Definimos cuántos médicos mostrar por página
+const ITEMS_PER_PAGE = 10;
 
 const PacienteListaMedicos = () => {
     const [allMedicos, setAllMedicos] = useState([]);
     const [displayedMedicos, setDisplayedMedicos] = useState([]);
     const [page, setPage] = useState(1);
     const [refreshing, setRefreshing] = useState(false);
-    const { setMedicoSeleccionado } = useMedico(); // Usar el contexto
+    const navigation = useNavigation();
 
     useEffect(() => {
         fetchMedicos();
@@ -20,17 +21,16 @@ const PacienteListaMedicos = () => {
 
     useEffect(() => {
         if (allMedicos.length > 0) {
-            // Cargar la primera página al cargar los médicos
             const initialMedicos = allMedicos.slice(0, ITEMS_PER_PAGE);
             setDisplayedMedicos(initialMedicos);
-            setPage(2); // Configurar la siguiente página
+            setPage(2);
         }
     }, [allMedicos]);
 
     const fetchMedicos = async () => {
         try {
             const token = await SecureStore.getItemAsync('token');
-            const medicosData = await getMedicos();
+            const medicosData = await getMedicos(token);
             setAllMedicos(medicosData);
         } catch (error) {
             console.error('No se pudo recuperar la lista de médicos.', error);
@@ -50,16 +50,8 @@ const PacienteListaMedicos = () => {
         }
     };
 
-    const handleAddMedico = async (medicoId, medico) => {
-        try {
-            const token = await SecureStore.getItemAsync('token');
-            await patchMedicoByPacienteId(medicoId, token);
-            setMedicoSeleccionado(medico); // Actualizar el médico seleccionado
-            Alert.alert('Éxito', 'El médico ha sido asignado exitosamente al paciente.');
-        } catch (error) {
-            console.error('No se pudo asignar el médico al paciente.', error);
-            Alert.alert('Error', 'No se pudo asignar el médico al paciente.');
-        }
+    const handlePayment = (medico) => {
+        navigation.navigate('PaymentScreen', { medicoId: medico.id, amount: medico.precio });
     };
 
     const onRefresh = async () => {
@@ -67,7 +59,7 @@ const PacienteListaMedicos = () => {
         await fetchMedicos();
         const initialMedicos = allMedicos.slice(0, ITEMS_PER_PAGE);
         setDisplayedMedicos(initialMedicos);
-        setPage(2); // Configurar la siguiente página
+        setPage(2);
         setRefreshing(false);
     };
 
@@ -96,10 +88,11 @@ const PacienteListaMedicos = () => {
                                         <Icon name="phone" size={16} color="#666" /> {medico.telefono}
                                     </Text>
                                     <Text style={styles.medicoDetail}>{medico.edad} años</Text>
+                                    <Text style={styles.medicoDetail}>Precio: {medico.precio} PEN</Text>
                                 </View>
                             </View>
                             <View style={styles.buttonsContainer}>
-                                <TouchableOpacity style={styles.addButton} onPress={() => handleAddMedico(medico.id, medico)}>
+                                <TouchableOpacity style={styles.addButton} onPress={() => handlePayment(medico)}>
                                     <Text style={styles.buttonText}>Escoger</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.routeButton}>
